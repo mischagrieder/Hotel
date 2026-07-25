@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Panorama-Suite">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b2724"/>
+      <stop offset="1" stop-color="#423a32"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" fill="url(#bg)"/>
+  <g fill="none" stroke="#d8b878" stroke-opacity="0.55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="580" cy="220" r="34"/>
+    <path d="M190 370 L270 280 L390 310 L520 265 L640 310 L710 370"/>
+  </g>
+  <text x="50%" y="430" text-anchor="middle" fill="#d8b878"
+        font-family="Georgia, 'Cormorant Garamond', serif" font-size="34" font-style="italic" letter-spacing="1">Panorama-Suite</text>
+  <text x="50%" y="472" text-anchor="middle" fill="rgba(255,255,255,0.45)"
+        font-family="Arial, sans-serif" font-size="15" letter-spacing="3" text-transform="uppercase">BILD ERSETZEN</text>
+</svg>

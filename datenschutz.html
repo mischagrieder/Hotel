@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Datenschutz</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="legal-page">
+    <a href="index.html" class="legal-back">← Zurück zur Startseite</a>
+    <h1>Datenschutzerklärung</h1>
+
+    <h2>1. Verantwortliche Stelle</h2>
+    <p id="dsResponsible"></p>
+
+    <h2>2. Erhebung und Verarbeitung von Daten</h2>
+    <p>Beim Besuch dieser Website werden durch den Hosting-Anbieter automatisch technische
+       Zugriffsdaten (z. B. IP-Adresse, Datum/Uhrzeit, aufgerufene Seite, Browsertyp)
+       in Server-Logdateien gespeichert. Diese Daten dienen der technischen Bereitstellung
+       und Sicherheit und werden nicht mit anderen Datenquellen zusammengeführt.</p>
+
+    <h2>3. Kontaktformular</h2>
+    <p>Wenn Sie uns über das Kontaktformular oder per E-Mail Anfragen zukommen lassen,
+       werden Ihre Angaben zur Bearbeitung der Anfrage und für Anschlussfragen gespeichert.
+       Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
+
+    <h2>4. Karten &amp; externe Dienste</h2>
+    <p>Diese Website bindet ggf. Google Maps zur Darstellung des Standorts ein. Dabei kann
+       Ihre IP-Adresse an Google übermittelt werden. Weitere Informationen finden Sie in der
+       Datenschutzerklärung von Google.</p>
+
+    <h2>5. Ihre Rechte</h2>
+    <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der
+       Verarbeitung Ihrer personenbezogenen Daten sowie auf Datenübertragbarkeit und
+       Widerspruch. Wenden Sie sich hierzu an die oben genannte verantwortliche Stelle.</p>
+
+    <p style="margin-top:32px;font-size:.85rem;color:#999">
+      Hinweis: Dies ist eine vereinfachte Vorlage und ersetzt keine Rechtsberatung. Bitte an
+      die tatsächlich eingesetzten Dienste und die geltende Rechtslage anpassen
+      (DE/AT: DSGVO, CH: revDSG).
+    </p>
+  </main>
+
+  <script src="js/content.js"></script>
+  <script>
+    (function () {
+      var H = window.HOTEL || {}, L = H.legal || {}, C = H.contact || {}, T = H.theme || {};
+      var r = document.documentElement.style;
+      if (T.colorPrimary) r.setProperty("--color-primary", T.colorPrimary);
+      if (T.colorAccent)  r.setProperty("--color-accent", T.colorAccent);
+      if (T.colorBg)      r.setProperty("--color-bg", T.colorBg);
+      if (T.colorText)    r.setProperty("--color-text", T.colorText);
+      if (T.fontHeading)  r.setProperty("--font-heading", T.fontHeading);
+      if (T.fontBody)     r.setProperty("--font-body", T.fontBody);
+
+      var parts = [];
+      if (L.company) parts.push(L.company);
+      if (L.addressLines) parts.push(L.addressLines.join(", "));
+      if (L.email || C.email) parts.push("E-Mail: " + (L.email || C.email));
+      if (L.phone || C.phone) parts.push("Telefon: " + (L.phone || C.phone));
+      var n = document.getElementById("dsResponsible");
+      if (n) n.innerHTML = parts.join("<br>");
+    })();
+  </script>
+</body>
+</html>

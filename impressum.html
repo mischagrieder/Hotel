@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Impressum</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <main class="legal-page">
+    <a href="index.html" class="legal-back">← Zurück zur Startseite</a>
+    <h1>Impressum</h1>
+
+    <h2>Angaben gemäß Anbieterkennzeichnung</h2>
+    <p id="legalCompany"></p>
+    <address id="legalAddress"></address>
+
+    <h2>Vertreten durch</h2>
+    <p id="legalOwner"></p>
+
+    <h2>Kontakt</h2>
+    <p id="legalContact"></p>
+
+    <h2>Umsatzsteuer-ID / UID</h2>
+    <p id="legalVat"></p>
+
+    <h2>Haftungsausschluss</h2>
+    <p>Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt. Für die
+       Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr
+       übernommen werden. Für Inhalte externer Links sind ausschließlich deren Betreiber
+       verantwortlich.</p>
+
+    <p style="margin-top:32px;font-size:.85rem;color:#999">
+      Hinweis: Dies ist eine Vorlage. Bitte die Angaben an die tatsächlichen Verhältnisse
+      und die im jeweiligen Land geltenden Pflichten anpassen (z. B. DE: § 5 DDG /
+      Handelsregister; AT: § 5 ECG; CH: Angaben nach UWG).
+    </p>
+  </main>
+
+  <script src="js/content.js"></script>
+  <script>
+    (function () {
+      var H = window.HOTEL || {}, L = H.legal || {}, C = H.contact || {}, T = H.theme || {};
+      var r = document.documentElement.style;
+      if (T.colorPrimary) r.setProperty("--color-primary", T.colorPrimary);
+      if (T.colorAccent)  r.setProperty("--color-accent", T.colorAccent);
+      if (T.colorBg)      r.setProperty("--color-bg", T.colorBg);
+      if (T.colorText)    r.setProperty("--color-text", T.colorText);
+      if (T.fontHeading)  r.setProperty("--font-heading", T.fontHeading);
+      if (T.fontBody)     r.setProperty("--font-body", T.fontBody);
+
+      function set(id, val) { var n = document.getElementById(id); if (n && val) n.textContent = val; }
+      set("legalCompany", L.company);
+      var addr = document.getElementById("legalAddress");
+      if (addr && L.addressLines) addr.innerHTML = L.addressLines.join("<br>");
+      set("legalOwner", L.owner);
+      var contact = [];
+      if (L.phone || C.phone) contact.push("Telefon: " + (L.phone || C.phone));
+      if (L.email || C.email) contact.push("E-Mail: " + (L.email || C.email));
+      set("legalContact", contact.join("  ·  "));
+      set("legalVat", L.vatId || "—");
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Titel & Meta werden aus js/content.js gesetzt (Fallback hier) -->
+  <title>Hotel Seeblick</title>
+  <meta name="description" content="Boutique-Hotel am See – stilvolle Zimmer und herzlicher Service." />
+
+  <!-- Open Graph (wird von main.js aus content.js befüllt) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Hotel Seeblick" />
+  <meta property="og:description" content="Boutique-Hotel am See." />
+  <meta property="og:image" content="images/og-image.svg" />
+
+  <!-- Schriften -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+
+  <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ============ HEADER / NAVIGATION ============ -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <a href="#top" class="logo" id="logo">Seeblick</a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" id="mainNav" aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="#ueber-uns">Über uns</a></li>
+          <li><a href="#zimmer">Zimmer</a></li>
+          <li><a href="#ausstattung">Ausstattung</a></li>
+          <li><a href="#galerie">Galerie</a></li>
+          <li><a href="#lage">Lage</a></li>
+          <li><a href="#kontakt" class="nav-cta">Anfragen</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <span id="top"></span>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content container">
+      <p class="hero-eyebrow" id="heroEyebrow">Boutique-Hotel am See</p>
+      <h1 id="heroHeadline">Ankommen. Durchatmen. Genießen.</h1>
+      <p class="hero-subline" id="heroSubline">Ihr stilvolles Rückzugsort direkt am Seeufer.</p>
+      <a href="#kontakt" class="btn btn-primary" id="heroCta">Jetzt anfragen</a>
+    </div>
+    <a href="#ueber-uns" class="hero-scroll" aria-label="Nach unten scrollen">˅</a>
+  </section>
+
+  <!-- ============ ÜBER UNS ============ -->
+  <section class="section about" id="ueber-uns">
+    <div class="container about-grid">
+      <div class="about-text reveal">
+        <p class="eyebrow">Willkommen</p>
+        <h2 id="aboutTitle">Herzlich willkommen</h2>
+        <div id="aboutText"></div>
+      </div>
+      <div class="about-image reveal">
+        <img id="aboutImage" alt="" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ZIMMER ============ -->
+  <section class="section rooms" id="zimmer">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Übernachten</p>
+        <h2>Zimmer &amp; Suiten</h2>
+      </div>
+      <div class="rooms-grid" id="roomsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ AUSSTATTUNG ============ -->
+  <section class="section amenities" id="ausstattung">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ihr Komfort</p>
+        <h2>Ausstattung &amp; Services</h2>
+      </div>
+      <div class="amenities-grid" id="amenitiesGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ GALERIE ============ -->
+  <section class="section gallery" id="galerie">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">Einblicke</p>
+        <h2>Galerie</h2>
+      </div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ BEWERTUNGEN ============ -->
+  <section class="section testimonials" id="bewertungen">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow eyebrow-light">Gästestimmen</p>
+        <h2>Das sagen unsere Gäste</h2>
+      </div>
+      <div class="testimonials-grid" id="testimonialsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ LAGE ============ -->
+  <section class="section location" id="lage">
+    <div class="container location-grid">
+      <div class="location-text reveal">
+        <p class="eyebrow">Anfahrt</p>
+        <h2>Lage &amp; Umgebung</h2>
+        <p class="location-address" id="locationAddress"></p>
+        <p class="location-directions" id="locationDirections"></p>
+        <a href="#" id="mapsLink" class="btn btn-outline" target="_blank" rel="noopener">In Google Maps öffnen</a>
+      </div>
+      <div class="location-map reveal">
+        <iframe id="mapFrame" title="Karte" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KONTAKT ============ -->
+  <section class="section contact" id="kontakt">
+    <div class="container contact-grid">
+      <div class="contact-info reveal">
+        <p class="eyebrow">Kontakt</p>
+        <h2>Anfrage &amp; Buchung</h2>
+        <ul class="contact-list" id="contactList"></ul>
+        <div class="contact-social" id="contactSocial"></div>
+      </div>
+
+      <form class="contact-form reveal" id="contactForm">
+        <div class="form-row">
+          <label>Name
+            <input type="text" name="name" required />
+          </label>
+          <label>E-Mail
+            <input type="email" name="email" required />
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Anreise
+            <input type="date" name="anreise" />
+          </label>
+          <label>Abreise
+            <input type="date" name="abreise" />
+          </label>
+        </div>
+        <label>Ihre Nachricht
+          <textarea name="nachricht" rows="4" placeholder="Wie können wir Ihnen helfen?"></textarea>
+        </label>
+        <button type="submit" class="btn btn-primary" id="formSubmit">Anfrage senden</button>
+        <p class="form-status" id="formStatus" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="footer-logo" id="footerLogo">Seeblick</span>
+        <p id="footerTagline"></p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer-Navigation">
+        <a href="#ueber-uns">Über uns</a>
+        <a href="#zimmer">Zimmer</a>
+        <a href="#kontakt">Kontakt</a>
+        <a href="impressum.html">Impressum</a>
+        <a href="datenschutz.html">Datenschutz</a>
+      </nav>
+      <p class="footer-copy">© <span id="footerYear"></span> <span id="footerName">Hotel Seeblick</span>. Alle Rechte vorbehalten.</p>
+    </div>
+  </footer>
+
+  <!-- ============ LIGHTBOX (Galerie) ============ -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">×</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Zurück">‹</button>
+    <img class="lightbox-img" id="lightboxImg" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Weiter">›</button>
+  </div>
+
+  <script src="js/content.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

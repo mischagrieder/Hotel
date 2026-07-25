@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1120" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Über uns">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#efe9e0"/>
+      <stop offset="1" stop-color="#e2d8c8"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1120" fill="url(#bg)"/>
+  <g fill="none" stroke="#b48a3f" stroke-opacity="0.55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
+    <circle cx="580" cy="480" r="34"/>
+    <path d="M190 630 L270 540 L390 570 L520 525 L640 570 L710 630"/>
+  </g>
+  <text x="50%" y="690" text-anchor="middle" fill="#b48a3f"
+        font-family="Georgia, 'Cormorant Garamond', serif" font-size="34" font-style="italic" letter-spacing="1">Über uns</text>
+  <text x="50%" y="732" text-anchor="middle" fill="rgba(60,50,40,0.5)"
+        font-family="Arial, sans-serif" font-size="15" letter-spacing="3" text-transform="uppercase">BILD ERSETZEN</text>
+</svg>
