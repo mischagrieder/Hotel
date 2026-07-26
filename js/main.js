@@ -2,11 +2,14 @@
    HOTEL-WEBSITE · RENDER- & INTERAKTIONS-LOGIK
    -----------------------------------------------------------------------------
    Liest window.HOTEL aus js/content.js, baut die Seite auf, injiziert die
-   SEO-Strukturdaten und steuert die Animationen. Muss normal nicht angefasst werden.
+   SEO-Strukturdaten (Hotel + FAQ) und steuert alle Animationen:
+   Hero-Fade, gepinnte Erlebnis-Kapitel, Diagramm, Count-up, Reveals.
+   Muss normalerweise nicht angefasst werden.
    ============================================================================= */
 (function () {
   "use strict";
   var H = window.HOTEL || {};
+  var REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* --- Helfer ------------------------------------------------------------ */
   function $(s, r) { return (r || document).querySelector(s); }
@@ -26,13 +29,12 @@
   function setText(s, v) { var n = $(s); if (n && v != null) n.textContent = v; }
   function setAttr(s, a, v) { var n = $(s); if (n && v != null) n.setAttribute(a, v); }
   function abs(url) {
-    if (!url) return url;
-    if (/^https?:\/\//.test(url)) return url;
+    if (!url || /^https?:\/\//.test(url)) return url;
     var base = (H.meta && H.meta.url) ? H.meta.url.replace(/\/$/, "") : "";
     return base ? base + "/" + url.replace(/^\//, "") : url;
   }
 
-  /* --- Icons (Ausstattung) ----------------------------------------------- */
+  /* --- Icons --------------------------------------------------------------- */
   var W = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">';
   var ICONS = {
     wifi: '<path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.5 16.11a6 6 0 0 1 7 0"/><path d="M12 20h.01"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/>',
@@ -48,11 +50,17 @@
     bike: '<circle cx="6" cy="17" r="3"/><circle cx="18" cy="17" r="3"/><path d="M6 17l4-8h5l3 8"/><path d="M10 9l2-4h3"/>',
     view: '<path d="M3 20l6-9 4 5 3-4 5 8z"/><circle cx="8" cy="7" r="2"/>',
     family: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-    reception: '<path d="M3 21h18"/><path d="M5 21V10l7-4 7 4v11"/><path d="M9 21v-6h6v6"/>'
+    reception: '<path d="M3 21h18"/><path d="M5 21V10l7-4 7 4v11"/><path d="M9 21v-6h6v6"/>',
+    /* Trust-Icons */
+    tag: '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    heart: '<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>',
+    check: '<path d="M20 6L9 17l-5-5"/>'
   };
-  function icon(name) { return W + (ICONS[name] || '<path d="M20 6L9 17l-5-5"/>') + "</svg>"; }
+  function icon(name) { return W + (ICONS[name] || ICONS.check) + "</svg>"; }
 
-  /* --- Theme & Meta ------------------------------------------------------ */
+  /* --- Theme, Meta, Strukturdaten ------------------------------------------- */
   function applyTheme() {
     var t = H.theme || {}, r = document.documentElement.style, map = {
       colorInk: "--color-ink", colorBg: "--color-bg", colorSand: "--color-sand",
@@ -60,6 +68,8 @@
       fontDisplay: "--font-display", fontBody: "--font-body"
     };
     Object.keys(map).forEach(function (k) { if (t[k]) r.setProperty(map[k], t[k]); });
+    var bg = $("#bgFix");
+    if (bg) bg.style.backgroundImage = "url('" + (t.backgroundImage || (H.hero && H.hero.image) || "") + "')";
   }
   function applyMeta() {
     var m = H.meta || {};
@@ -76,7 +86,7 @@
   }
   function injectJsonLd() {
     var m = H.meta || {}, loc = H.location || {}, c = H.contact || {}, rt = H.rating || {};
-    var data = {
+    var hotel = {
       "@context": "https://schema.org", "@type": "Hotel",
       name: m.name, description: m.seoDescription, url: m.url || undefined,
       telephone: c.phone, priceRange: m.priceRange,
@@ -85,11 +95,21 @@
       geo: (loc.lat && loc.lng) ? { "@type": "GeoCoordinates", latitude: loc.lat, longitude: loc.lng } : undefined,
       amenityFeature: (H.amenities || []).map(function (a) { return { "@type": "LocationFeatureSpecification", name: a.title, value: true }; })
     };
-    if (rt.value && rt.count) data.aggregateRating = { "@type": "AggregateRating", ratingValue: rt.value, reviewCount: rt.count, bestRating: 5 };
-    var node = $("#ldHotel"); if (node) node.textContent = JSON.stringify(data);
+    if (rt.value && rt.count) hotel.aggregateRating = { "@type": "AggregateRating", ratingValue: rt.value, reviewCount: rt.count, bestRating: 5 };
+    var n = $("#ldHotel"); if (n) n.textContent = JSON.stringify(hotel);
+
+    if (H.faq && H.faq.length) {
+      var faq = {
+        "@context": "https://schema.org", "@type": "FAQPage",
+        mainEntity: H.faq.map(function (f) {
+          return { "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } };
+        })
+      };
+      var fn = $("#ldFaq"); if (fn) fn.textContent = JSON.stringify(faq);
+    }
   }
 
-  /* --- Brand / Hero ------------------------------------------------------ */
+  /* --- Brand & Hero ----------------------------------------------------------- */
   function applyBrand() {
     var b = H.brand || {};
     if (b.logoImage) { var lg = $("#logo"); if (lg) lg.innerHTML = '<img src="' + b.logoImage + '" alt="' + ((H.meta && H.meta.name) || "") + '" style="height:36px">'; }
@@ -104,8 +124,6 @@
     var c1 = $("#heroCta1"), c2 = $("#heroCta2");
     if (c1 && h.ctaPrimaryText) { c1.textContent = h.ctaPrimaryText; if (h.ctaPrimaryHref) c1.setAttribute("href", h.ctaPrimaryHref); }
     if (c2 && h.ctaSecondaryText) { c2.textContent = h.ctaSecondaryText; if (h.ctaSecondaryHref) c2.setAttribute("href", h.ctaSecondaryHref); }
-    setText("#headerCta", (H.booking && H.booking.ctaText) ? "Anfragen" : "Anfragen");
-    // Externes Buchungssystem
     var bk = H.booking || {};
     if (bk.type === "external" && bk.externalUrl) {
       [c1, $("#headerCta"), $(".mobile-cta .btn")].forEach(function (n) {
@@ -114,7 +132,23 @@
     }
   }
 
-  /* --- Kennzahlen (mit Count-up) ----------------------------------------- */
+  /* Headline wird beim Scrollen transparent und gleitet nach oben */
+  function initHeroFade() {
+    var inner = $("#heroInner"); if (!inner || REDUCED) return;
+    var ticking = false;
+    function update() {
+      var y = window.scrollY, range = window.innerHeight * 0.6;
+      var p = Math.min(1, y / range);
+      inner.style.opacity = String(1 - p);
+      inner.style.transform = "translateY(" + (-p * 40) + "px)";
+      ticking = false;
+    }
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+  }
+
+  /* --- Kennzahlen + Count-up ------------------------------------------------------ */
   function renderStats() {
     var wrap = $("#statsInner"); if (!wrap || !H.stats) return;
     H.stats.forEach(function (s) {
@@ -126,18 +160,32 @@
   }
   function countUp(node) {
     var raw = node.getAttribute("data-value"), suffix = node.getAttribute("data-suffix") || "";
-    var num = parseFloat(raw); if (isNaN(num)) return;
+    var num = parseFloat(raw); if (isNaN(num) || REDUCED) return;
     var dec = (raw.split(".")[1] || "").length, dur = 1100, t0 = null;
     function step(ts) {
       if (!t0) t0 = ts;
-      var p = Math.min((ts - t0) / dur, 1), val = (num * (0.2 + 0.8 * (1 - Math.pow(1 - p, 3))));
+      var p = Math.min((ts - t0) / dur, 1), val = num * (0.2 + 0.8 * (1 - Math.pow(1 - p, 3)));
       node.textContent = val.toFixed(dec) + suffix;
       if (p < 1) requestAnimationFrame(step); else node.textContent = num.toFixed(dec) + suffix;
     }
     requestAnimationFrame(step);
   }
 
-  /* --- Über uns ---------------------------------------------------------- */
+  /* --- Vertrauens-Badges ------------------------------------------------------------ */
+  function renderTrust() {
+    var wrap = $("#trustStrip"); if (!wrap || !H.trust) return;
+    H.trust.forEach(function (t) {
+      wrap.appendChild(el("div", { class: "trust-item reveal" }, [
+        el("span", { class: "trust-icon", html: icon(t.icon) }),
+        el("div", {}, [
+          el("strong", { text: t.title }),
+          el("span", { text: t.text })
+        ])
+      ]));
+    });
+  }
+
+  /* --- Über uns ----------------------------------------------------------------------- */
   function renderAbout() {
     var a = H.about || {};
     setText("#aboutKicker", a.kicker);
@@ -153,36 +201,71 @@
     setAttr("#aboutImage", "alt", a.imageAlt || a.title || "");
   }
 
-  /* --- Erlebnisse -------------------------------------------------------- */
+  /* --- Erlebnisse: gepinnte Scroll-Kapitel --------------------------------------------- */
   function renderExperiences() {
-    var wrap = $("#experiencesWrap"); if (!wrap || !H.experiences) return;
-    H.experiences.forEach(function (e) {
-      wrap.appendChild(el("article", { class: "experience reveal" }, [
-        el("figure", { class: "experience-media" }, [ el("img", { src: e.image, alt: e.imageAlt || e.title, loading: "lazy" }) ]),
-        el("div", { class: "experience-text" }, [
-          el("p", { class: "kicker", text: e.kicker }),
-          el("h3", { text: e.title }),
-          el("p", { text: e.text })
-        ])
+    var texts = $("#expTexts"), visuals = $("#expVisuals"), progress = $("#expProgress");
+    if (!texts || !H.experiences) return;
+    H.experiences.forEach(function (e, i) {
+      texts.appendChild(el("div", { class: "exp-step" + (i === 0 ? " active" : ""), "data-i": i }, [
+        // Bild im Step: nur sichtbar auf Mobile / reduced-motion (Fallback ohne Pinning)
+        el("figure", { class: "exp-step-media" }, [ el("img", { src: e.image, alt: e.imageAlt || e.title, loading: "lazy" }) ]),
+        el("p", { class: "kicker", text: e.kicker }),
+        el("h3", { text: e.title }),
+        el("p", { text: e.text })
       ]));
+      if (visuals) visuals.appendChild(el("div", { class: "exp-visual" + (i === 0 ? " active" : "") }, [
+        el("img", { src: e.image, alt: "", loading: "lazy" })
+      ]));
+      if (progress) progress.appendChild(el("i", { class: i === 0 ? "active" : "" }));
     });
   }
+  function initExperiencesPin() {
+    var section = $("#erlebnisse"); if (!section || REDUCED) return;
+    var steps = section.querySelectorAll(".exp-step");
+    var visuals = section.querySelectorAll(".exp-visual");
+    var dots = section.querySelectorAll(".exp-progress i");
+    if (!steps.length) return;
+    var current = 0, ticking = false;
+    function setActive(i) {
+      if (i === current) return;
+      current = i;
+      steps.forEach(function (s, k) { s.classList.toggle("active", k === i); });
+      visuals.forEach(function (v, k) { v.classList.toggle("active", k === i); });
+      dots.forEach(function (d, k) { d.classList.toggle("active", k === i); });
+    }
+    function update() {
+      var rect = section.getBoundingClientRect();
+      var total = rect.height - window.innerHeight;
+      if (total <= 0) { ticking = false; return; }
+      var progress = Math.min(1, Math.max(0, -rect.top / total));
+      var idx = Math.min(steps.length - 1, Math.floor(progress * steps.length));
+      setActive(idx);
+      ticking = false;
+    }
+    window.addEventListener("scroll", function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
+  }
 
-  /* --- Zimmer ------------------------------------------------------------ */
+  /* --- Zimmer: grosse Panels mit Zweitbild ------------------------------------------------ */
   function renderRooms() {
-    var grid = $("#roomsGrid"); if (!grid) return;
-    (H.rooms || []).forEach(function (r, i) {
-      var tags = (r.features || []).map(function (f) { return el("span", { class: "room-tag", text: f }); });
-      grid.appendChild(el("article", { class: "room-card reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
-        el("div", { class: "room-media" }, [
-          el("img", { src: r.image, alt: r.imageAlt || r.name, loading: "lazy" }),
-          r.size ? el("span", { class: "room-badge", text: r.size }) : null
+    var list = $("#roomsList"); if (!list) return;
+    (H.rooms || []).forEach(function (r) {
+      var features = (r.features || []).map(function (f) {
+        return el("li", {}, [ el("span", { html: icon("check"), style: "display:inline-flex" }), f ]);
+      });
+      list.appendChild(el("article", { class: "room-panel reveal" }, [
+        el("div", { class: "room-visuals" }, [
+          r.size ? el("span", { class: "room-badge", text: r.size + (r.occupancy ? " · " + r.occupancy : "") }) : null,
+          el("div", { class: "room-img-main" }, [ el("img", { src: r.image, alt: r.imageAlt || r.name, loading: "lazy" }) ]),
+          r.image2 ? el("div", { class: "room-img-detail" }, [ el("img", { src: r.image2, alt: r.image2Alt || "", loading: "lazy" }) ]) : null
         ]),
-        el("div", { class: "room-body" }, [
+        el("div", { class: "room-info" }, [
           el("h3", { text: r.name }),
-          r.occupancy ? el("p", { class: "room-meta", text: r.occupancy }) : null,
+          r.occupancy ? el("p", { class: "room-meta", text: r.size + " · " + r.occupancy }) : null,
           el("p", { class: "room-desc", text: r.description }),
-          el("div", { class: "room-tags" }, tags),
+          el("ul", { class: "room-features" }, features),
           el("div", { class: "room-foot" }, [
             el("span", { class: "room-price" }, [ document.createTextNode(r.price || ""), r.priceNote ? el("small", { text: " " + r.priceNote }) : null ]),
             el("a", { class: "room-link", href: "#buchen" }, [ "Anfragen", el("span", { text: "→" }) ])
@@ -192,25 +275,59 @@
     });
   }
 
-  /* --- Ausstattung ------------------------------------------------------- */
-  function renderAmenities() {
-    var grid = $("#amenitiesGrid"); if (!grid) return;
-    (H.amenities || []).forEach(function (a, i) {
-      grid.appendChild(el("div", { class: "amenity reveal", style: "transition-delay:" + ((i % 3) * 70) + "ms" }, [
-        el("div", { class: "amenity-icon", html: icon(a.icon) }),
-        el("h3", { text: a.title }),
-        el("p", { text: a.text })
+  /* --- Bewertungs-Diagramm (0 bis 99) ------------------------------------------------------- */
+  function renderRatingChart() {
+    var wrap = $("#ratingChart"), rb = H.ratingBreakdown;
+    if (!wrap || !rb || !rb.items) return;
+    var max = rb.max || 99;
+    rb.items.forEach(function (it) {
+      var pct = Math.max(0, Math.min(100, (it.value / max) * 100));
+      wrap.appendChild(el("div", { class: "chart-row", title: it.label + ": " + it.value + " von " + max }, [
+        el("span", { class: "chart-label", text: it.label }),
+        el("div", { class: "chart-track" }, [ el("div", { class: "chart-bar", "data-w": pct + "%" }) ]),
+        el("span", { class: "chart-value", text: String(it.value) })
       ]));
     });
+    setText("#chartNote", rb.note || "");
+    // Balken animieren, sobald sichtbar
+    if ("IntersectionObserver" in window && !REDUCED) {
+      var io = new IntersectionObserver(function (ents) {
+        ents.forEach(function (en) {
+          if (en.isIntersecting) {
+            wrap.querySelectorAll(".chart-bar").forEach(function (b, i) {
+              setTimeout(function () { b.style.width = b.getAttribute("data-w"); }, i * 90);
+            });
+            io.disconnect();
+          }
+        });
+      }, { threshold: 0.3 });
+      io.observe(wrap);
+    } else {
+      wrap.querySelectorAll(".chart-bar").forEach(function (b) { b.style.width = b.getAttribute("data-w"); });
+    }
   }
 
-  /* --- Galerie + Lightbox ------------------------------------------------ */
+  /* --- Gästestimmen ---------------------------------------------------------------------------- */
+  function renderTestimonials() {
+    var grid = $("#testimonialsGrid");
+    if (grid) (H.testimonials || []).forEach(function (t, i) {
+      grid.appendChild(el("figure", { class: "testimonial reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
+        el("div", { class: "stars", text: "★★★★★".slice(0, t.rating || 5) }),
+        el("blockquote", { text: "„" + t.quote + "“" }),
+        el("figcaption", {}, [ el("strong", { text: t.author }), t.source ? el("span", { text: " · " + t.source }) : null ])
+      ]));
+    });
+    var rt = H.rating || {};
+    if (rt.value) { var badge = $("#ratingBadge"); if (badge) badge.innerHTML = "<strong>★ " + rt.value + "</strong> von 5 · " + (rt.count ? rt.count + " Bewertungen" : "") + (rt.source ? " · " + rt.source : ""); }
+  }
+
+  /* --- Galerie + Lightbox ------------------------------------------------------------------------ */
   var gallery = [];
   function renderGallery() {
     var grid = $("#galleryGrid"); if (!grid) return;
     gallery = (H.gallery || []).map(function (g) { return typeof g === "string" ? { src: g, alt: "" } : g; });
     gallery.forEach(function (g, i) {
-      var btn = el("button", { class: "gallery-item reveal", type: "button", "aria-label": "Bild vergrößern", style: "transition-delay:" + ((i % 4) * 60) + "ms" }, [
+      var btn = el("button", { class: "gallery-item reveal", type: "button", "aria-label": "Bild vergrößern: " + (g.alt || ""), style: "transition-delay:" + ((i % 4) * 60) + "ms" }, [
         el("img", { src: g.src, alt: g.alt || ("Galeriebild " + (i + 1)), loading: "lazy" })
       ]);
       btn.addEventListener("click", function () { openLightbox(i); });
@@ -233,21 +350,19 @@
     });
   }
 
-  /* --- Bewertungen ------------------------------------------------------- */
-  function renderTestimonials() {
-    var grid = $("#testimonialsGrid"); if (grid) (H.testimonials || []).forEach(function (t, i) {
-      var stars = "★★★★★".slice(0, t.rating || 5);
-      grid.appendChild(el("figure", { class: "testimonial reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
-        el("div", { class: "stars", text: stars }),
-        el("blockquote", { text: "„" + t.quote + "“" }),
-        el("figcaption", {}, [ el("strong", { text: t.author }), t.source ? el("span", { text: " · " + t.source }) : null ])
+  /* --- Ausstattung -------------------------------------------------------------------------------- */
+  function renderAmenities() {
+    var grid = $("#amenitiesGrid"); if (!grid) return;
+    (H.amenities || []).forEach(function (a, i) {
+      grid.appendChild(el("div", { class: "amenity reveal", style: "transition-delay:" + ((i % 3) * 70) + "ms" }, [
+        el("div", { class: "amenity-icon", html: icon(a.icon) }),
+        el("h3", { text: a.title }),
+        el("p", { text: a.text })
       ]));
     });
-    var rt = H.rating || {};
-    if (rt.value) { var badge = $("#ratingBadge"); if (badge) badge.innerHTML = "<strong>★ " + rt.value + "</strong> von 5 · " + (rt.count ? rt.count + " Bewertungen" : "") + (rt.source ? " · " + rt.source : ""); }
   }
 
-  /* --- Umgebung ---------------------------------------------------------- */
+  /* --- Umgebung ------------------------------------------------------------------------------------ */
   function renderNearby() {
     var grid = $("#nearbyGrid"); if (!grid || !H.nearby) return;
     H.nearby.forEach(function (n, i) {
@@ -259,22 +374,23 @@
     });
   }
 
-  /* --- Lage -------------------------------------------------------------- */
-  function renderLocation() {
-    var l = H.location || {};
-    setText("#locationAddress", l.address);
-    setText("#locationDirections", l.directions);
-    var q = l.mapsQuery || l.address || "";
-    if (q) { var e = encodeURIComponent(q); setAttr("#mapFrame", "src", "https://www.google.com/maps?q=" + e + "&output=embed"); setAttr("#mapsLink", "href", "https://www.google.com/maps/search/?api=1&query=" + e); }
+  /* --- FAQ ------------------------------------------------------------------------------------------ */
+  function renderFaq() {
+    var list = $("#faqList"); if (!list || !H.faq) return;
+    H.faq.forEach(function (f) {
+      list.appendChild(el("details", { class: "faq-item reveal" }, [
+        el("summary", { text: f.q }),
+        el("p", { text: f.a })
+      ]));
+    });
   }
 
-  /* --- Kontakt (im Buchungsblock) ---------------------------------------- */
+  /* --- Kontakt (Buchungsblock) ------------------------------------------------------------------------ */
   function renderContact() {
     var c = H.contact || {}, list = $("#contactList");
     if (list) [
       c.phone ? { l: "Telefon", v: c.phone, h: "tel:" + c.phone.replace(/\s/g, "") } : null,
       c.email ? { l: "E-Mail", v: c.email, h: "mailto:" + c.email } : null,
-      c.address ? { l: "Adresse", v: c.address } : null,
       c.hours ? { l: "Rezeption", v: c.hours } : null
     ].forEach(function (r) {
       if (!r) return;
@@ -286,7 +402,7 @@
     });
   }
 
-  /* --- Formular ---------------------------------------------------------- */
+  /* --- Formular ------------------------------------------------------------------------------------------ */
   function initForm() {
     var form = $("#contactForm"), status = $("#formStatus"); if (!form) return;
     var bk = H.booking || {}, c = H.contact || {};
@@ -298,27 +414,34 @@
         status.textContent = "Wird gesendet …"; status.className = "form-status";
         fetch(bk.formEndpoint, { method: "POST", body: d, headers: { Accept: "application/json" } })
           .then(function (res) { if (res.ok) { form.reset(); status.textContent = "Vielen Dank! Ihre Anfrage ist bei uns eingegangen."; status.className = "form-status ok"; } else throw 0; })
-          .catch(function () { status.textContent = "Senden fehlgeschlagen – bitte per E-Mail an " + (c.email || "") + "."; status.className = "form-status err"; });
+          .catch(function () { status.textContent = "Senden fehlgeschlagen. Bitte schreiben Sie an " + (c.email || "") + "."; status.className = "form-status err"; });
         return;
       }
-      var subject = "Anfrage über die Website – " + (d.get("name") || "");
+      var subject = "Anfrage über die Website: " + (d.get("name") || "");
       var body = "Name: " + (d.get("name") || "") + "\nE-Mail: " + (d.get("email") || "") +
         "\nAnreise: " + (d.get("anreise") || "") + "\nAbreise: " + (d.get("abreise") || "") +
         "\nGäste: " + (d.get("gaeste") || "") + "\n\nNachricht:\n" + (d.get("nachricht") || "");
       window.location.href = "mailto:" + (c.email || "") + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      status.textContent = "Ihr E-Mail-Programm wurde geöffnet – bitte die Nachricht noch absenden."; status.className = "form-status ok";
+      status.textContent = "Ihr E-Mail-Programm wurde geöffnet. Bitte senden Sie die Nachricht noch ab.";
+      status.className = "form-status ok";
     });
   }
 
-  /* --- Footer ------------------------------------------------------------ */
+  /* --- Footer ----------------------------------------------------------------------------------------------- */
   function renderFooter() {
+    var c = H.contact || {}, loc = H.location || {};
     setText("#footerYear", String(new Date().getFullYear()));
     setText("#footerName", (H.meta && H.meta.name) || "");
     setText("#footerTagline", (H.meta && H.meta.tagline) || "");
-    setText("#footerAddress", (H.contact && H.contact.address) || "");
+    setText("#footerAddress", loc.address || c.address || "");
+    setText("#footerDirections", loc.directions || "");
+    var fp = $("#footerPhone");
+    if (fp && c.phone) fp.innerHTML = '<a href="tel:' + c.phone.replace(/\s/g, "") + '">' + c.phone + "</a>";
+    var fe = $("#footerEmail");
+    if (fe && c.email) fe.innerHTML = '<a href="mailto:' + c.email + '">' + c.email + "</a>";
   }
 
-  /* --- Navigation -------------------------------------------------------- */
+  /* --- Navigation --------------------------------------------------------------------------------------------- */
   function initNav() {
     var toggle = $("#navToggle"), nav = $("#mainNav"), header = $("#header");
     if (toggle && nav) {
@@ -333,13 +456,13 @@
     function onScroll() { if (header) header.classList.toggle("scrolled", window.scrollY > 30); }
     window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener("click", function (e) { var id = a.getAttribute("href"); if (id.length < 2) return; var t = document.querySelector(id); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); } });
+      a.addEventListener("click", function (e) { var id = a.getAttribute("href"); if (id.length < 2) return; var t = document.querySelector(id); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: "start" }); } });
     });
   }
 
-  /* --- Hero-Parallax ----------------------------------------------------- */
+  /* --- Hero-Parallax -------------------------------------------------------------------------------------------- */
   function initParallax() {
-    var bg = $("#heroBg"); if (!bg || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var bg = $("#heroBg"); if (!bg || REDUCED) return;
     var ticking = false;
     window.addEventListener("scroll", function () {
       if (ticking) return; ticking = true;
@@ -347,7 +470,7 @@
     }, { passive: true });
   }
 
-  /* --- Mobile Buchungsleiste --------------------------------------------- */
+  /* --- Mobile Buchungsleiste --------------------------------------------------------------------------------------- */
   function initMobileCta() {
     var bar = $("#mobileCta"), price = $("#mobileCtaPrice"); if (!bar) return;
     var rooms = H.rooms || [];
@@ -360,11 +483,11 @@
     }, { passive: true });
   }
 
-  /* --- Reveal (robust) --------------------------------------------------- */
+  /* --- Reveal (robust) ------------------------------------------------------------------------------------------------ */
   function initReveal() {
     var items = [].slice.call(document.querySelectorAll(".reveal"));
     function showAll() { items.forEach(function (i) { i.classList.add("visible"); }); }
-    if (!("IntersectionObserver" in window)) { showAll(); return; }
+    if (!("IntersectionObserver" in window) || REDUCED) { showAll(); return; }
     var io = new IntersectionObserver(function (ents) {
       ents.forEach(function (en) {
         if (en.isIntersecting) {
@@ -375,19 +498,19 @@
       });
     }, { threshold: 0, rootMargin: "0px 0px -40px 0px" });
     items.forEach(function (i) { io.observe(i); });
-    // Count-up-Ziele separat beobachten (sie sind keine .reveal)
     [].slice.call(document.querySelectorAll(".stat-value")).forEach(function (i) { io.observe(i); });
     function inView() { items.forEach(function (i) { if (i.getBoundingClientRect().top < window.innerHeight) i.classList.add("visible"); }); }
     inView(); window.addEventListener("load", inView);
     setTimeout(showAll, 2600);
   }
 
-  /* --- Start ------------------------------------------------------------- */
+  /* --- Start ---------------------------------------------------------------------------------------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme(); applyMeta(); injectJsonLd(); applyBrand();
-    renderHero(); renderStats(); renderAbout(); renderExperiences();
-    renderRooms(); renderAmenities(); renderGallery(); renderTestimonials();
-    renderNearby(); renderLocation(); renderContact(); renderFooter();
-    initLightbox(); initForm(); initNav(); initParallax(); initMobileCta(); initReveal();
+    renderHero(); renderStats(); renderTrust(); renderAbout(); renderExperiences();
+    renderRooms(); renderRatingChart(); renderTestimonials(); renderGallery();
+    renderAmenities(); renderNearby(); renderFaq(); renderContact(); renderFooter();
+    initLightbox(); initForm(); initNav(); initParallax(); initMobileCta();
+    initHeroFade(); initExperiencesPin(); initReveal();
   });
 })();

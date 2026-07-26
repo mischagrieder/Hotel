@@ -5,11 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Hotel Seeblick · Boutique-Hotel direkt am See</title>
-  <meta name="description" content="Stilvoll übernachten direkt am Seeufer – moderne Zimmer, regionale Küche und ein Panoramablick, der bleibt." />
+  <meta name="description" content="Stilvoll übernachten direkt am Seeufer: moderne Zimmer, regionale Küche und ein Panoramablick, der bleibt." />
   <link rel="canonical" href="https://example.com/" />
   <meta name="theme-color" content="#1f4a3f" />
 
-  <!-- Open Graph / Social (füllt sich aus content.js) -->
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Hotel Seeblick" />
   <meta property="og:title" content="Hotel Seeblick · Boutique-Hotel am See" />
@@ -18,39 +17,37 @@
   <meta property="og:url" content="https://example.com/" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- Schriften -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/style.css?v=2" />
+  <link rel="stylesheet" href="css/style.css?v=3" />
 
-  <!-- Strukturierte Daten für Google (füllt sich aus content.js) -->
   <script type="application/ld+json" id="ldHotel"></script>
+  <script type="application/ld+json" id="ldFaq"></script>
 </head>
 <body>
 
-  <!-- Skip-Link (Barrierefreiheit) -->
+  <!-- Fixes, weichgezeichnetes Hintergrundbild hinter dem "Papier" -->
+  <div class="bg-fix" id="bgFix" aria-hidden="true"></div>
+
   <a href="#willkommen" class="skip-link">Zum Inhalt springen</a>
 
   <!-- ============ HEADER ============ -->
   <header class="site-header" id="header">
     <div class="container header-inner">
       <a href="#start" class="logo" id="logo">Seeblick</a>
-
       <nav class="main-nav" id="mainNav" aria-label="Hauptnavigation">
         <ul>
           <li><a href="#willkommen">Haus</a></li>
           <li><a href="#erlebnisse">Erlebnisse</a></li>
           <li><a href="#zimmer">Zimmer</a></li>
-          <li><a href="#galerie">Galerie</a></li>
-          <li><a href="#lage">Lage</a></li>
+          <li><a href="#galerie">Einblicke</a></li>
+          <li><a href="#faq">Fragen</a></li>
         </ul>
       </nav>
-
       <a href="#buchen" class="btn btn-primary btn-sm header-cta" id="headerCta">Anfragen</a>
-
       <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mainNav">
         <span></span><span></span><span></span>
       </button>
@@ -59,13 +56,13 @@
 
   <main id="main">
 
-    <!-- ============ HERO ============ -->
+    <!-- ============ HERO (Vollbild, Headline faded beim Scrollen) ============ -->
     <section class="hero" id="start" aria-label="Willkommen">
       <div class="hero-media">
         <div class="hero-bg" id="heroBg"></div>
         <div class="hero-scrim"></div>
       </div>
-      <div class="hero-inner container">
+      <div class="hero-inner container" id="heroInner">
         <p class="hero-kicker reveal" id="heroKicker">Rapperswil · Direkt am Seeufer</p>
         <h1 class="hero-title reveal" id="heroTitle">Wo der Tag am Wasser beginnt.</h1>
         <p class="hero-sub reveal" id="heroSub">Ein Boutique-Hotel für alle, die Ruhe, guten Geschmack und den schönsten Blick suchen.</p>
@@ -77,143 +74,156 @@
       <a href="#willkommen" class="hero-scroll" aria-label="Weiter nach unten"><span></span></a>
     </section>
 
-    <!-- ============ KENNZAHLEN ============ -->
-    <aside class="stats" aria-label="Auf einen Blick">
-      <div class="container stats-inner" id="statsInner"></div>
-    </aside>
+    <!-- ============ DAS "PAPIER" ============ -->
+    <div class="sheet">
 
-    <!-- ============ ÜBER UNS / STORY ============ -->
-    <section class="section about" id="willkommen" aria-labelledby="aboutTitle">
-      <div class="container about-grid">
-        <div class="about-text">
-          <p class="kicker reveal" id="aboutKicker">Willkommen</p>
-          <h2 class="reveal" id="aboutTitle">Ein Haus mit Blick – und mit Haltung.</h2>
-          <p class="lead reveal" id="aboutLead"></p>
-          <div class="about-body reveal" id="aboutBody"></div>
-          <p class="signature reveal" id="aboutSignature"></p>
+      <!-- Kennzahlen + Vertrauen -->
+      <section class="sheet-top" aria-label="Auf einen Blick">
+        <div class="sheet-pad">
+          <div class="stats-inner" id="statsInner"></div>
+          <div class="trust-strip" id="trustStrip"></div>
         </div>
-        <figure class="about-media reveal">
-          <img id="aboutImage" alt="" loading="lazy" />
-        </figure>
-      </div>
-    </section>
+      </section>
 
-    <!-- ============ ERLEBNISSE ============ -->
-    <section class="section experiences" id="erlebnisse" aria-label="Erlebnisse">
-      <div class="container" id="experiencesWrap"></div>
-    </section>
-
-    <!-- ============ ZIMMER ============ -->
-    <section class="section rooms" id="zimmer" aria-labelledby="roomsTitle">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="kicker">Übernachten</p>
-          <h2 id="roomsTitle">Zimmer &amp; Suiten</h2>
-        </div>
-        <div class="rooms-grid" id="roomsGrid"></div>
-      </div>
-    </section>
-
-    <!-- ============ AUSSTATTUNG ============ -->
-    <section class="section amenities" id="ausstattung" aria-labelledby="amenTitle">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="kicker">Ihr Komfort</p>
-          <h2 id="amenTitle">Alles für einen guten Aufenthalt</h2>
-        </div>
-        <div class="amenities-grid" id="amenitiesGrid"></div>
-      </div>
-    </section>
-
-    <!-- ============ GALERIE ============ -->
-    <section class="section gallery" id="galerie" aria-labelledby="galTitle">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="kicker">Einblicke</p>
-          <h2 id="galTitle">Galerie</h2>
-        </div>
-        <div class="gallery-grid" id="galleryGrid"></div>
-      </div>
-    </section>
-
-    <!-- ============ BEWERTUNGEN ============ -->
-    <section class="section testimonials" id="bewertungen" aria-labelledby="testTitle">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="kicker kicker-invert">Gästestimmen</p>
-          <h2 id="testTitle">Was unsere Gäste sagen</h2>
-          <p class="rating-badge reveal" id="ratingBadge"></p>
-        </div>
-        <div class="testimonials-grid" id="testimonialsGrid"></div>
-      </div>
-    </section>
-
-    <!-- ============ UMGEBUNG ============ -->
-    <section class="section nearby" id="umgebung" aria-labelledby="nearTitle">
-      <div class="container">
-        <div class="section-head reveal">
-          <p class="kicker">In der Umgebung</p>
-          <h2 id="nearTitle">Alles in Reichweite</h2>
-        </div>
-        <div class="nearby-grid" id="nearbyGrid"></div>
-      </div>
-    </section>
-
-    <!-- ============ LAGE ============ -->
-    <section class="section location" id="lage" aria-labelledby="locTitle">
-      <div class="container location-grid">
-        <div class="location-text">
-          <p class="kicker reveal">Anfahrt</p>
-          <h2 class="reveal" id="locTitle">So finden Sie uns</h2>
-          <p class="location-address reveal" id="locationAddress"></p>
-          <p class="location-directions reveal" id="locationDirections"></p>
-          <a href="#" id="mapsLink" class="btn btn-outline reveal" target="_blank" rel="noopener">In Google Maps öffnen</a>
-        </div>
-        <div class="location-map reveal">
-          <iframe id="mapFrame" title="Standort auf der Karte" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ BUCHUNG / ABSCHLUSS-CTA ============ -->
-    <section class="section booking" id="buchen" aria-labelledby="bookTitle">
-      <div class="container booking-grid">
-        <div class="booking-intro reveal">
-          <p class="kicker kicker-invert">Anfrage &amp; Buchung</p>
-          <h2 id="bookTitle">Bereit für ein paar Tage am See?</h2>
-          <p class="booking-lead">Schreiben Sie uns – wir melden uns persönlich und schnell.</p>
-          <ul class="contact-list" id="contactList"></ul>
-          <div class="contact-social" id="contactSocial"></div>
-        </div>
-
-        <form class="booking-form reveal" id="contactForm" novalidate>
-          <div class="form-row">
-            <label>Name
-              <input type="text" name="name" autocomplete="name" required />
-            </label>
-            <label>E-Mail
-              <input type="email" name="email" autocomplete="email" required />
-            </label>
+      <!-- Über uns -->
+      <section class="section about" id="willkommen" aria-labelledby="aboutTitle">
+        <div class="sheet-pad about-grid">
+          <div class="about-text">
+            <p class="kicker reveal" id="aboutKicker">Willkommen</p>
+            <h2 class="reveal" id="aboutTitle">Ein Haus mit Blick und mit Haltung.</h2>
+            <p class="lead reveal" id="aboutLead"></p>
+            <div class="about-body reveal" id="aboutBody"></div>
+            <p class="signature reveal" id="aboutSignature"></p>
           </div>
-          <div class="form-row">
-            <label>Anreise
-              <input type="date" name="anreise" />
-            </label>
-            <label>Abreise
-              <input type="date" name="abreise" />
-            </label>
+          <figure class="about-media reveal">
+            <img id="aboutImage" alt="" loading="lazy" />
+          </figure>
+        </div>
+      </section>
+
+      <!-- Erlebnisse: gepinnte Scroll-Kapitel -->
+      <section class="exp-scroll" id="erlebnisse" aria-label="Erlebnisse">
+        <div class="exp-pin">
+          <div class="sheet-pad exp-grid">
+            <div class="exp-texts" id="expTexts"></div>
+            <div class="exp-visuals" id="expVisuals"></div>
           </div>
-          <label>Gäste
-            <input type="number" name="gaeste" min="1" max="12" value="2" />
-          </label>
-          <label>Ihre Nachricht
-            <textarea name="nachricht" rows="4" placeholder="Wünsche, Fragen, Zimmerwunsch …"></textarea>
-          </label>
-          <button type="submit" class="btn btn-primary btn-block" id="formSubmit">Anfrage senden</button>
-          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
+          <div class="exp-progress" id="expProgress" aria-hidden="true"></div>
+        </div>
+      </section>
+
+      <!-- Zimmer: grosse Panels mit Zweitbild -->
+      <section class="section rooms" id="zimmer" aria-labelledby="roomsTitle">
+        <div class="sheet-pad">
+          <div class="section-head reveal">
+            <p class="kicker">Übernachten</p>
+            <h2 id="roomsTitle">Zimmer &amp; Suiten</h2>
+          </div>
+          <div class="rooms-list" id="roomsList"></div>
+        </div>
+      </section>
+
+      <!-- Bewertungen: Diagramm + Stimmen (dunkle Sektion) -->
+      <section class="section reviews" id="bewertungen" aria-labelledby="revTitle">
+        <div class="sheet-pad">
+          <div class="reviews-grid">
+            <div class="reviews-chart reveal">
+              <p class="kicker kicker-invert">Gästestimmen</p>
+              <h2 id="revTitle">Was unsere Gäste sagen</h2>
+              <p class="rating-badge" id="ratingBadge"></p>
+              <div class="chart" id="ratingChart" role="img" aria-label="Bewertungen nach Kategorie auf einer Skala von 0 bis 99"></div>
+              <p class="chart-note" id="chartNote"></p>
+            </div>
+            <div class="reviews-quotes" id="testimonialsGrid"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Galerie / Einblicke -->
+      <section class="section gallery" id="galerie" aria-labelledby="galTitle">
+        <div class="sheet-pad">
+          <div class="section-head reveal">
+            <p class="kicker">Einblicke</p>
+            <h2 id="galTitle">Ein Rundgang durchs Haus</h2>
+          </div>
+          <div class="gallery-grid" id="galleryGrid"></div>
+        </div>
+      </section>
+
+      <!-- Ausstattung -->
+      <section class="section amenities" id="ausstattung" aria-labelledby="amenTitle">
+        <div class="sheet-pad">
+          <div class="section-head reveal">
+            <p class="kicker">Ihr Komfort</p>
+            <h2 id="amenTitle">Alles für einen guten Aufenthalt</h2>
+          </div>
+          <div class="amenities-grid" id="amenitiesGrid"></div>
+        </div>
+      </section>
+
+      <!-- Umgebung -->
+      <section class="section nearby" id="umgebung" aria-labelledby="nearTitle">
+        <div class="sheet-pad">
+          <div class="section-head reveal">
+            <p class="kicker">In der Umgebung</p>
+            <h2 id="nearTitle">Alles in Reichweite</h2>
+          </div>
+          <div class="nearby-grid" id="nearbyGrid"></div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="section faq" id="faq" aria-labelledby="faqTitle">
+        <div class="sheet-pad faq-grid">
+          <div class="faq-intro reveal">
+            <p class="kicker">Gut zu wissen</p>
+            <h2 id="faqTitle">Häufige Fragen</h2>
+            <p class="faq-lead">Ihre Frage ist nicht dabei? Rufen Sie uns an oder schreiben Sie uns, wir antworten persönlich.</p>
+          </div>
+          <div class="faq-list" id="faqList"></div>
+        </div>
+      </section>
+
+      <!-- Buchung -->
+      <section class="section booking" id="buchen" aria-labelledby="bookTitle">
+        <div class="sheet-pad booking-grid">
+          <div class="booking-intro reveal">
+            <p class="kicker kicker-invert">Anfrage &amp; Buchung</p>
+            <h2 id="bookTitle">Bereit für ein paar Tage am See?</h2>
+            <p class="booking-lead">Schreiben Sie uns. Wir melden uns persönlich und schnell.</p>
+            <ul class="contact-list" id="contactList"></ul>
+            <div class="contact-social" id="contactSocial"></div>
+          </div>
+          <form class="booking-form reveal" id="contactForm" novalidate>
+            <div class="form-row">
+              <label>Name
+                <input type="text" name="name" autocomplete="name" required />
+              </label>
+              <label>E-Mail
+                <input type="email" name="email" autocomplete="email" required />
+              </label>
+            </div>
+            <div class="form-row">
+              <label>Anreise
+                <input type="date" name="anreise" />
+              </label>
+              <label>Abreise
+                <input type="date" name="abreise" />
+              </label>
+            </div>
+            <label>Gäste
+              <input type="number" name="gaeste" min="1" max="12" value="2" />
+            </label>
+            <label>Ihre Nachricht
+              <textarea name="nachricht" rows="4" placeholder="Wünsche, Fragen, Zimmerwunsch …"></textarea>
+            </label>
+            <button type="submit" class="btn btn-primary btn-block" id="formSubmit">Anfrage senden</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+
+    </div><!-- /sheet -->
   </main>
 
   <!-- ============ FOOTER ============ -->
@@ -222,12 +232,21 @@
       <div class="footer-brand">
         <span class="footer-logo" id="footerLogo">Seeblick</span>
         <p id="footerTagline"></p>
-        <p class="footer-address" id="footerAddress"></p>
+      </div>
+      <div class="footer-contact">
+        <p class="footer-label">Adresse</p>
+        <p id="footerAddress"></p>
+        <p id="footerDirections" class="footer-directions"></p>
+      </div>
+      <div class="footer-contact">
+        <p class="footer-label">Kontakt</p>
+        <p id="footerPhone"></p>
+        <p id="footerEmail"></p>
       </div>
       <nav class="footer-nav" aria-label="Footer-Navigation">
         <a href="#willkommen">Haus</a>
         <a href="#zimmer">Zimmer</a>
-        <a href="#galerie">Galerie</a>
+        <a href="#faq">Fragen</a>
         <a href="#buchen">Anfragen</a>
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
@@ -238,13 +257,13 @@
     </div>
   </footer>
 
-  <!-- ============ MOBILE BUCHUNGSLEISTE (sticky) ============ -->
+  <!-- Mobile Buchungsleiste -->
   <div class="mobile-cta" id="mobileCta">
     <span class="mobile-cta-price" id="mobileCtaPrice"></span>
     <a href="#buchen" class="btn btn-primary btn-sm">Anfragen</a>
   </div>
 
-  <!-- ============ LIGHTBOX ============ -->
+  <!-- Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">×</button>
     <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Vorheriges Bild">‹</button>
@@ -252,7 +271,7 @@
     <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Nächstes Bild">›</button>
   </div>
 
-  <script src="js/content.js?v=2"></script>
-  <script src="js/main.js?v=2"></script>
+  <script src="js/content.js?v=3"></script>
+  <script src="js/main.js?v=3"></script>
 </body>
 </html>

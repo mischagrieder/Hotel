@@ -2,13 +2,14 @@
    HOTEL-WEBSITE · ZENTRALE INHALTSDATEI
    -----------------------------------------------------------------------------
    Das ist die EINZIGE Datei, die du pro Hotel ausfüllen musst.
-   Ändere Texte, Preise, Kontaktdaten und Bildpfade – Layout, Design, Technik,
-   SEO (inkl. Google-Rich-Results) passen sich automatisch an.
+   Ändere Texte, Preise, Kontaktdaten und Bildpfade. Layout, Design, Technik
+   und SEO (inkl. Google-Rich-Results) passen sich automatisch an.
 
-   Reihenfolge in dieser Datei:
+   Reihenfolge:
    1 Grunddaten/SEO · 2 Design · 3 Logo · 4 Hero · 5 Kennzahlen · 6 Bewertung
-   7 Über-uns · 8 Erlebnisse · 9 Zimmer · 10 Ausstattung · 11 Galerie
-   12 Stimmen · 13 Umgebung · 14 Lage · 15 Kontakt · 16 Buchung · 17 Social · 18 Recht
+   7 Bewertungs-Diagramm · 8 Vertrauen · 9 Über uns · 10 Erlebnisse · 11 Zimmer
+   12 Ausstattung · 13 Galerie · 14 Stimmen · 15 Umgebung · 16 FAQ · 17 Lage
+   18 Kontakt · 19 Buchung · 20 Social · 21 Recht
    ============================================================================= */
 
 window.HOTEL = {
@@ -17,53 +18,48 @@ window.HOTEL = {
   meta: {
     name: "Hotel Seeblick",
     tagline: "Boutique-Hotel am See",
-    // SEO-Titel (Browser-Tab & Google-Ergebnis). Kurz, mit Ort & Nutzen:
     seoTitle: "Hotel Seeblick · Boutique-Hotel direkt am See in Rapperswil",
     seoDescription:
       "Stilvoll übernachten direkt am Seeufer: das Hotel Seeblick in Rapperswil " +
       "vereint moderne Zimmer, regionale Küche und einen Panoramablick, der bleibt. " +
       "Jetzt Verfügbarkeit anfragen.",
-    url: "https://example.com",       // spätere Domain (für SEO/OpenGraph/Sitemap)
+    url: "https://example.com",
     lang: "de",
-    priceRange: "€€",                 // €, €€, €€€ – erscheint in Google
+    priceRange: "€€",
     currency: "CHF"
   },
 
-  /* --- 2. Design (Farben & Schriften) ------------------------------------- */
-  // Tausche einfach die Hex-Werte. --accent ist die Markenfarbe (Buttons/Links).
+  /* --- 2. Design ----------------------------------------------------------- */
   theme: {
-    colorInk:        "#1b1a17",   // Haupttext & Überschriften
-    colorBg:         "#faf6ef",   // warmer Elfenbein-Hintergrund
-    colorSand:       "#f1e9dc",   // abgesetzte Sektionen
-    colorSurface:    "#ffffff",   // Karten
-    colorAccent:     "#1f4a3f",   // Marke: tiefes Kiefern-/Seegrün
-    colorAccentDark: "#163a31",   // Hover
+    colorInk:        "#1b1a17",
+    colorBg:         "#faf6ef",
+    colorSand:       "#f1e9dc",
+    colorSurface:    "#ffffff",
+    colorAccent:     "#1f4a3f",
+    colorAccentDark: "#163a31",
     fontDisplay:     "'Fraunces', 'Cormorant Garamond', Georgia, serif",
-    fontBody:        "'Inter', system-ui, -apple-system, sans-serif"
+    fontBody:        "'Inter', system-ui, -apple-system, sans-serif",
+    // Hintergrundbild hinter dem "Papier"-Layout (leicht unscharf gerendert)
+    backgroundImage: "images/hero.jpg"
   },
 
-  /* --- 3. Logo / Marke ---------------------------------------------------- */
-  brand: {
-    logoText: "Seeblick",
-    logoImage: ""                 // optional: "images/logo.svg"
-  },
+  /* --- 3. Logo ------------------------------------------------------------- */
+  brand: { logoText: "Seeblick", logoImage: "" },
 
-  /* --- 4. Hero ------------------------------------------------------------ */
+  /* --- 4. Hero ------------------------------------------------------------- */
   hero: {
     image: "images/hero.jpg",
     imageAlt: "Blick über den See auf das Hotel Seeblick in der Abendsonne",
     kicker: "Rapperswil · Direkt am Seeufer",
     headline: "Wo der Tag am Wasser beginnt.",
-    subline: "Ein Boutique-Hotel für alle, die Ruhe, guten Geschmack und den " +
-             "schönsten Blick weit und breit suchen.",
+    subline: "Ein Boutique-Hotel für alle, die Ruhe, guten Geschmack und den schönsten Blick weit und breit suchen.",
     ctaPrimaryText: "Verfügbarkeit anfragen",
     ctaPrimaryHref: "#buchen",
     ctaSecondaryText: "Zimmer entdecken",
     ctaSecondaryHref: "#zimmer"
   },
 
-  /* --- 5. Kennzahlen (kleine Trust-Zeile unter dem Hero) ------------------ */
-  // Werte mit einer Zahl werden sanft hochgezählt (z.B. "18", "1932", "4.9").
+  /* --- 5. Kennzahlen -------------------------------------------------------- */
   stats: [
     { value: "4.9", label: "★ Gästebewertung" },
     { value: "18",  label: "Zimmer & Suiten" },
@@ -71,23 +67,41 @@ window.HOTEL = {
     { value: "1932", label: "familiengeführt seit" }
   ],
 
-  /* --- 6. Bewertung (für Social Proof & Google-Rich-Results) -------------- */
-  rating: {
-    value: 4.9,      // Durchschnitt
-    count: 214,      // Anzahl Bewertungen
-    source: "Google & Booking.com"
+  /* --- 6. Gesamtbewertung (Social Proof & Google) --------------------------- */
+  rating: { value: 4.9, count: 214, source: "Google & Booking.com" },
+
+  /* --- 7. Bewertungs-Diagramm (Skala 0 bis 99) ------------------------------ */
+  ratingBreakdown: {
+    title: "So bewerten uns unsere Gäste",
+    note: "Basis: 214 verifizierte Bewertungen der letzten 24 Monate",
+    max: 99,
+    items: [
+      { label: "Lage",            value: 99 },
+      { label: "Personal",        value: 98 },
+      { label: "Sauberkeit",      value: 97 },
+      { label: "Frühstück",       value: 96 },
+      { label: "Komfort",         value: 94 },
+      { label: "Preis & Leistung", value: 92 }
+    ]
   },
 
-  /* --- 7. Über uns / Willkommen (Story) ----------------------------------- */
+  /* --- 8. Vertrauenselemente ------------------------------------------------ */
+  trust: [
+    { icon: "tag",    title: "Bestpreis bei Direktanfrage", text: "Direkt anfragen lohnt sich immer." },
+    { icon: "clock",  title: "Antwort innert 24 Stunden",   text: "Persönlich, nicht automatisiert." },
+    { icon: "shield", title: "Kostenlos stornierbar",       text: "Bis 48 Stunden vor Anreise." },
+    { icon: "heart",  title: "Familiengeführt seit 1932",   text: "In dritter Generation." }
+  ],
+
+  /* --- 9. Über uns / Story --------------------------------------------------- */
   about: {
     kicker: "Willkommen",
-    title: "Ein Haus mit Blick – und mit Haltung.",
+    title: "Ein Haus mit Blick und mit Haltung.",
     lead: "Seit drei Generationen empfangen wir unsere Gäste wie Freunde.",
     body:
       "Eingebettet zwischen sanften Hügeln und glitzerndem Wasser verbindet das " +
-      "Hotel Seeblick zeitgemässe Ruhe mit herzlicher Gastfreundschaft. Jedes " +
-      "Detail – von der regionalen Küche bis zum Leinen auf dem Bett – ist mit " +
-      "Bedacht gewählt.\n\n" +
+      "Hotel Seeblick zeitgemässe Ruhe mit herzlicher Gastfreundschaft. Jedes Detail " +
+      "ist mit Bedacht gewählt, von der regionalen Küche bis zum Leinen auf dem Bett.\n\n" +
       "Ob Kurzurlaub, Feier oder Geschäftsreise: Bei uns kommen Sie an, atmen durch " +
       "und fühlen sich sofort zu Hause.",
     image: "images/about.jpg",
@@ -96,7 +110,7 @@ window.HOTEL = {
     signatureRole: "Gastgeberinnen & Gastgeber"
   },
 
-  /* --- 8. Erlebnisse (Bild/Text im Wechsel – das Herz des Storytellings) --- */
+  /* --- 10. Erlebnisse (Scroll-Kapitel: Text und Bild wechseln beim Scrollen) -- */
   experiences: [
     {
       kicker: "Am Wasser",
@@ -109,7 +123,7 @@ window.HOTEL = {
     {
       kicker: "Genuss",
       title: "Küche mit Charakter",
-      text: "Unsere Küche kocht saisonal und regional – ehrlich, frisch und mit " +
+      text: "Unsere Küche kocht saisonal und regional. Ehrlich, frisch und mit " +
             "Liebe zum Handwerk. Am Abend ein Glas Wein, dazu Licht über dem See.",
       image: "images/exp-2.jpg",
       imageAlt: "Regionales Gericht, angerichtet auf einem Holztisch"
@@ -117,52 +131,63 @@ window.HOTEL = {
     {
       kicker: "Ruhe",
       title: "Wellness & Weite",
-      text: "Sauna, warmes Holz, weicher Bademantel – und dahinter immer der See. " +
+      text: "Sauna, warmes Holz, weicher Bademantel. Und dahinter immer der See. " +
             "Zeit, die nur Ihnen gehört.",
       image: "images/exp-3.jpg",
       imageAlt: "Ruhiger Wellnessbereich mit Sauna und Blick ins Grüne"
     }
   ],
 
-  /* --- 9. Zimmer & Suiten ------------------------------------------------- */
+  /* --- 11. Zimmer & Suiten (mit Zweitbild für mehr Einblick) ------------------ */
   rooms: [
     {
       name: "Doppelzimmer Komfort",
-      description: "Gemütliches Zimmer mit französischem Balkon und Blick ins Grüne.",
+      description:
+        "Gemütliches Zimmer mit französischem Balkon und Blick ins Grüne. " +
+        "Helles Holz, weiches Leinen und eine Regendusche, die den Tag gut beginnen lässt.",
       price: "ab CHF 120",
       priceNote: "/ Nacht",
       size: "24 m²",
       occupancy: "2 Personen",
       image: "images/room-1.jpg",
       imageAlt: "Modern eingerichtetes Doppelzimmer mit hellem Holz",
-      features: ["Kingsize-Bett", "Kostenloses WLAN", "Regendusche"]
+      image2: "images/room-1b.jpg",
+      image2Alt: "Badezimmer mit Regendusche und warmem Naturstein",
+      features: ["Kingsize-Bett", "Regendusche", "Kostenloses WLAN", "Zimmersafe"]
     },
     {
       name: "Juniorsuite Seeblick",
-      description: "Grosszügige Suite mit eigenem Balkon und direktem Blick auf den See.",
+      description:
+        "Grosszügige Suite mit eigenem Balkon und direktem Blick auf den See. " +
+        "Morgens Kaffee am Wasser, abends das letzte Licht über den Hügeln.",
       price: "ab CHF 190",
       priceNote: "/ Nacht",
       size: "38 m²",
-      occupancy: "2–3 Personen",
+      occupancy: "2 bis 3 Personen",
       image: "images/room-2.jpg",
       imageAlt: "Helle Juniorsuite mit Balkon und Seeblick",
-      features: ["Balkon mit Seeblick", "Sitzecke", "Nespresso"]
+      image2: "images/room-2b.jpg",
+      image2Alt: "Balkon-Sitzecke mit Blick auf den See",
+      features: ["Balkon mit Seeblick", "Sitzecke", "Nespresso", "Bademäntel"]
     },
     {
       name: "Panorama-Suite",
-      description: "Unser Highlight: Wohnbereich, Badewanne am Fenster, Rundumblick.",
+      description:
+        "Unser Highlight: eigener Wohnbereich, freistehende Badewanne am Fenster " +
+        "und ein Rundumblick, den Sie so schnell nicht vergessen.",
       price: "ab CHF 260",
       priceNote: "/ Nacht",
       size: "55 m²",
-      occupancy: "2–4 Personen",
+      occupancy: "2 bis 4 Personen",
       image: "images/room-3.jpg",
       imageAlt: "Grosse Panorama-Suite mit freistehender Badewanne am Fenster",
-      features: ["Freistehende Badewanne", "Wohnbereich", "Minibar inklusive"]
+      image2: "images/room-3b.jpg",
+      image2Alt: "Wohnbereich der Suite mit Sofa und Seeblick am Abend",
+      features: ["Freistehende Badewanne", "Wohnbereich", "Minibar inklusive", "Späte Abreise möglich"]
     }
   ],
 
-  /* --- 10. Ausstattung & Services ----------------------------------------- */
-  // icon: siehe Liste am Dateiende (ICONS)
+  /* --- 12. Ausstattung -------------------------------------------------------- */
   amenities: [
     { icon: "wifi",       title: "Kostenloses WLAN",  text: "Schnell im ganzen Haus." },
     { icon: "breakfast",  title: "Frühstücksbuffet",  text: "Regional & frisch, bis 11 Uhr." },
@@ -172,18 +197,19 @@ window.HOTEL = {
     { icon: "pet",        title: "Haustiere",         text: "Ihr Vierbeiner ist willkommen." }
   ],
 
-  /* --- 11. Galerie -------------------------------------------------------- */
-  // Objekte mit Alt-Text (gut für SEO). Reine Strings gehen auch.
+  /* --- 13. Galerie (Einblicke ins Haus) ---------------------------------------- */
   gallery: [
-    { src: "images/gallery-1.jpg", alt: "Aussenansicht des Hotels am Seeufer" },
-    { src: "images/gallery-2.jpg", alt: "Detail der gemütlichen Zimmereinrichtung" },
-    { src: "images/gallery-3.jpg", alt: "Terrasse mit Blick auf den See" },
-    { src: "images/gallery-4.jpg", alt: "Regionales Frühstück am Morgen" },
-    { src: "images/gallery-5.jpg", alt: "Wellnessbereich mit Sauna" },
-    { src: "images/gallery-6.jpg", alt: "Sonnenuntergang über dem See" }
+    { src: "images/gallery-1.jpg",   alt: "Aussenansicht des Hotels am Seeufer" },
+    { src: "images/lobby.jpg",       alt: "Empfang mit warmem Licht und frischen Blumen" },
+    { src: "images/gallery-3.jpg",   alt: "Terrasse mit Blick auf den See" },
+    { src: "images/restaurant.jpg",  alt: "Frühstücksraum mit grossen Fenstern zum See" },
+    { src: "images/gallery-4.jpg",   alt: "Regionales Frühstück am Morgen" },
+    { src: "images/gallery-2.jpg",   alt: "Detail der Zimmereinrichtung" },
+    { src: "images/gallery-5.jpg",   alt: "Wellnessbereich mit Sauna" },
+    { src: "images/gallery-6.jpg",   alt: "Sonnenuntergang über dem See" }
   ],
 
-  /* --- 12. Gästestimmen --------------------------------------------------- */
+  /* --- 14. Gästestimmen --------------------------------------------------------- */
   testimonials: [
     { quote: "Der schönste Blick, den wir je aus einem Hotelzimmer hatten. Wir kommen wieder!",
       author: "Familie Berger", source: "Google", rating: 5 },
@@ -193,53 +219,56 @@ window.HOTEL = {
       author: "Thomas M.", source: "TripAdvisor", rating: 5 }
   ],
 
-  /* --- 13. In der Umgebung (Storytelling + lokales SEO) ------------------- */
+  /* --- 15. In der Umgebung -------------------------------------------------------- */
   nearby: [
-    { title: "Altstadt Rapperswil", distance: "5 Min.", text: "Gassen, Rosengärten und das Schloss über dem See." },
-    { title: "Seepromenade",        distance: "1 Min.", text: "Spazieren, baden, Schiff fahren – direkt vor der Tür." },
+    { title: "Altstadt Rapperswil", distance: "5 Min.",  text: "Gassen, Rosengärten und das Schloss über dem See." },
+    { title: "Seepromenade",        distance: "1 Min.",  text: "Spazieren, baden, Schiff fahren. Direkt vor der Tür." },
     { title: "Wander- & Radwege",   distance: "vor Ort", text: "Startpunkte für Touren rund um den See." }
   ],
 
-  /* --- 14. Lage & Anfahrt ------------------------------------------------- */
+  /* --- 16. FAQ (häufige Fragen, erscheint auch in Google) -------------------------- */
+  faq: [
+    { q: "Wann kann ich einchecken und auschecken?",
+      a: "Check-in ab 14:00 Uhr, Check-out bis 11:00 Uhr. Früher ankommen oder später abreisen? Fragen Sie uns einfach an, wir machen fast immer etwas möglich." },
+    { q: "Gibt es Parkplätze am Hotel?",
+      a: "Ja, direkt am Haus stehen kostenlose Parkplätze für unsere Gäste bereit. E-Ladestation auf Anfrage." },
+    { q: "Ist das Frühstück im Preis inbegriffen?",
+      a: "Bei den meisten Raten ja. Unser regionales Frühstücksbuffet gibt es täglich bis 11 Uhr. Details stehen bei Ihrer Anfrage in der Bestätigung." },
+    { q: "Sind Haustiere willkommen?",
+      a: "Sehr gerne. Ihr Hund übernachtet für CHF 15 pro Nacht inklusive Näpfchen und Decke. Bitte bei der Anfrage kurz erwähnen." },
+    { q: "Wie kann ich kostenlos stornieren?",
+      a: "Bis 48 Stunden vor Anreise stornieren Sie kostenlos per E-Mail oder Telefon. Danach verrechnen wir die erste Nacht." },
+    { q: "Wie erreiche ich das Hotel mit dem Zug?",
+      a: "Vom Bahnhof Rapperswil sind es 5 Minuten zu Fuss der Seepromenade entlang. Auf Wunsch holen wir Sie mit dem Hotelwagen ab." }
+  ],
+
+  /* --- 17. Lage (für SEO und Footer, keine Karten-Sektion) -------------------------- */
   location: {
     address: "Seepromenade 12, 8640 Rapperswil, Schweiz",
     street: "Seepromenade 12",
     postalCode: "8640",
     city: "Rapperswil",
     country: "CH",
-    mapsQuery: "Seepromenade 12, 8640 Rapperswil",
     lat: 47.2266,
     lng: 8.8180,
-    directions: "5 Minuten vom Bahnhof · direkt an der Seepromenade · kostenlose Parkplätze am Haus."
+    directions: "5 Minuten vom Bahnhof, direkt an der Seepromenade. Kostenlose Parkplätze am Haus."
   },
 
-  /* --- 15. Kontakt -------------------------------------------------------- */
+  /* --- 18. Kontakt ------------------------------------------------------------------ */
   contact: {
     phone: "+41 55 123 45 67",
     email: "willkommen@hotel-seeblick.example",
     address: "Seepromenade 12, 8640 Rapperswil",
-    hours: "Rezeption täglich 7:00 – 22:00 Uhr"
+    hours: "Rezeption täglich 7:00 bis 22:00 Uhr"
   },
 
-  /* --- 16. Buchung / Anfrage ---------------------------------------------- */
-  // type "email": Formular öffnet vorausgefüllte E-Mail.
-  // type "external": CTA verlinkt auf ein Buchungssystem (externalUrl).
-  // formEndpoint (optional): Formspree-URL – dann wird direkt gesendet.
-  booking: {
-    type: "email",
-    externalUrl: "",
-    formEndpoint: "",
-    ctaText: "Verfügbarkeit anfragen"
-  },
+  /* --- 19. Buchung / Anfrage ---------------------------------------------------------- */
+  booking: { type: "email", externalUrl: "", formEndpoint: "", ctaText: "Verfügbarkeit anfragen" },
 
-  /* --- 17. Social Media (leer lassen = ausgeblendet) ---------------------- */
-  social: {
-    instagram: "https://instagram.com/",
-    facebook: "https://facebook.com/",
-    tripadvisor: ""
-  },
+  /* --- 20. Social ------------------------------------------------------------------------ */
+  social: { instagram: "https://instagram.com/", facebook: "https://facebook.com/", tripadvisor: "" },
 
-  /* --- 18. Rechtliches (für Impressum & Datenschutz) ---------------------- */
+  /* --- 21. Rechtliches --------------------------------------------------------------------- */
   legal: {
     company: "Hotel Seeblick GmbH",
     owner: "Maria Muster",
@@ -251,7 +280,7 @@ window.HOTEL = {
 };
 
 /* =============================================================================
-   ICONS – verfügbare Werte für "icon" (Abschnitt amenities):
-   wifi · breakfast · parking · spa · restaurant · pet · pool · ac ·
-   room-service · bar · bike · view · family · reception
+   ICONS für amenities: wifi · breakfast · parking · spa · restaurant · pet ·
+   pool · ac · room-service · bar · bike · view · family · reception
+   ICONS für trust: tag · clock · shield · heart
    ============================================================================= */
