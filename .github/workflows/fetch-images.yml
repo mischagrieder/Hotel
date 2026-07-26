@@ -1,0 +1,62 @@
+name: Fetch generated images (einmalig)
+
+# Temporärer Hilfs-Workflow: lädt die mit Higgsfield generierten Demo-Bilder,
+# optimiert sie für das Web und committet sie in den Branch.
+# Wird nach erfolgreichem Lauf wieder entfernt.
+
+on: workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download & optimize
+        run: |
+          set -e
+          command -v convert >/dev/null || { sudo apt-get update -qq && sudo apt-get install -y -qq imagemagick; }
+          BASE="https://d8j0ntlcm91z4.cloudfront.net/user_3FuPVC4JIayU3rXUwYAnv5ZoEBp"
+          declare -A MAP=(
+            [hero]="hf_20260726_094511_9ced82cd-8b16-45e2-b3fe-1957a010a945.png"
+            [about]="hf_20260726_094513_64df906f-2b58-4dc9-ba00-917969ba0ea2.png"
+            [exp-1]="hf_20260726_094516_87bf55ee-e84b-4301-a7e1-055bff0cbab8.png"
+            [exp-2]="hf_20260726_094518_bf244115-a684-4ba8-a509-48cb654304e1.png"
+            [exp-3]="hf_20260726_094521_e5790992-784b-4678-b710-af0a640eb70b.png"
+            [room-1]="hf_20260726_094529_8e3ed3f1-5d58-48b5-8ff9-daefd7278b25.png"
+            [room-2]="hf_20260726_094531_d4a6e246-d4ef-4211-86f6-3a11e6157fa2.png"
+            [room-3]="hf_20260726_094533_c310912d-4e8e-4cc1-b311-a6d1adeee022.png"
+            [gallery-1]="hf_20260726_094538_9d5a92ef-6530-4912-8079-5880dac438e3.png"
+            [gallery-2]="hf_20260726_094540_67bf0e37-ffae-49e3-9430-26fc1715efb6.png"
+            [gallery-3]="hf_20260726_094549_82aec9b8-0fb2-42bd-929e-c23a53bbec95.png"
+            [gallery-4]="hf_20260726_094551_40923e6e-3d0b-4644-8735-1abe0fac2ca6.png"
+            [gallery-5]="hf_20260726_094554_197a326a-bb72-47a8-b9aa-7b1c1f9b1276.png"
+            [gallery-6]="hf_20260726_094557_bab38915-3a63-448e-9540-5ce68450d78d.png"
+          )
+          mkdir -p /tmp/dl
+          for n in "${!MAP[@]}"; do
+            curl -sf --retry 3 -o "/tmp/dl/$n.png" "$BASE/${MAP[$n]}"
+            echo "geladen: $n"
+          done
+          # Web-Optimierung (Breite / Qualität)
+          declare -A W=( [hero]=1920 [about]=1000 [exp-1]=1200 [exp-2]=1200 [exp-3]=1200
+                         [room-1]=1200 [room-2]=1200 [room-3]=1200
+                         [gallery-1]=1200 [gallery-2]=900 [gallery-3]=900
+                         [gallery-4]=900 [gallery-5]=900 [gallery-6]=1400 )
+          for n in "${!W[@]}"; do
+            convert "/tmp/dl/$n.png" -resize "${W[$n]}x>" -strip -interlace Plane -quality 82 "images/$n.jpg"
+          done
+          # Open-Graph-Bild aus dem Hero (1200x630)
+          convert /tmp/dl/hero.png -resize 1200x -gravity center -crop 1200x630+0+0 +repage -strip -quality 82 images/og-image.jpg
+          ls -la images/*.jpg
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add images/*.jpg
+          git commit -m "Add AI-generated demo images (Higgsfield, web-optimized)"
+          git push
