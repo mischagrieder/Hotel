@@ -105,8 +105,11 @@ p { color: var(--ink-soft); }
   background: var(--color-bg);
   border-radius: var(--r-lg);
   box-shadow: var(--shadow-lg);
-  overflow: hidden;
+  /* KEIN overflow:hidden hier! Das würde position:sticky (Erlebnis-Pinning)
+     deaktivieren. Die runden Ecken bekommen die Randsektionen selbst. */
 }
+.sheet-top { border-radius: var(--r-lg) var(--r-lg) 0 0; }
+.sheet > .booking { border-radius: 0 0 var(--r-lg) var(--r-lg); }
 .sheet-pad { padding-inline: var(--pad); }
 .section { padding-block: clamp(64px, 9vw, 120px); }
 .section-head { max-width: 640px; margin-bottom: clamp(36px, 5vw, 60px); }
