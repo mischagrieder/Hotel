@@ -148,8 +148,9 @@
         inner.style.transform = "translateY(" + (-pText * 40) + "px)";
       }
       if (scrollHint) scrollHint.style.opacity = String(1 - pText);
-      // Bild: sanft von scharf zu verschwommen (bg-fix liegt dahinter)
-      var pImg = Math.min(1, Math.max(0, (y - vh * 0.1) / (vh * 0.8)));
+      // Bild steht fix und verliert beim Scrollen Deckkraft, das
+      // verschwommene Hintergrundbild dahinter wird sichtbar
+      var pImg = Math.min(1, Math.max(0, (y - vh * 0.05) / (vh * 0.75)));
       if (media) media.style.opacity = String(1 - pImg);
       ticking = false;
     }
@@ -216,13 +217,20 @@
   function renderExperiences() {
     var texts = $("#expTexts"), visuals = $("#expVisuals"), progress = $("#expProgress");
     if (!texts || !H.experiences) return;
+    var intro = H.experiencesIntro || {};
+    if (intro.kicker) setText("#expKicker", intro.kicker);
+    if (intro.title) setText("#expTitle", intro.title);
     H.experiences.forEach(function (e, i) {
+      var points = (e.points || []).map(function (p) {
+        return el("li", {}, [ el("span", { html: icon("check"), style: "display:inline-flex" }), p ]);
+      });
       texts.appendChild(el("div", { class: "exp-step" + (i === 0 ? " active" : ""), "data-i": i }, [
         // Bild im Step: nur sichtbar auf Mobile / reduced-motion (Fallback ohne Pinning)
         el("figure", { class: "exp-step-media" }, [ el("img", { src: e.image, alt: e.imageAlt || e.title, loading: "lazy" }) ]),
         el("p", { class: "kicker", text: e.kicker }),
         el("h3", { text: e.title }),
-        el("p", { text: e.text })
+        el("p", { text: e.text }),
+        points.length ? el("ul", { class: "exp-points" }, points) : null
       ]));
       if (visuals) visuals.appendChild(el("div", { class: "exp-visual" + (i === 0 ? " active" : "") }, [
         el("img", { src: e.image, alt: "", loading: "lazy" })
@@ -235,6 +243,7 @@
     var steps = section.querySelectorAll(".exp-step");
     var visuals = section.querySelectorAll(".exp-visual");
     var dots = section.querySelectorAll(".exp-progress i");
+    var count = $("#expCount");
     if (!steps.length) return;
     var current = 0, ticking = false;
     function setActive(i) {
@@ -243,6 +252,7 @@
       steps.forEach(function (s, k) { s.classList.toggle("active", k === i); });
       visuals.forEach(function (v, k) { v.classList.toggle("active", k === i); });
       dots.forEach(function (d, k) { d.classList.toggle("active", k === i); });
+      if (count) count.textContent = "0" + (i + 1) + " / 0" + steps.length;
     }
     function update() {
       var rect = section.getBoundingClientRect();
@@ -332,18 +342,50 @@
     if (rt.value) { var badge = $("#ratingBadge"); if (badge) badge.innerHTML = "<strong>★ " + rt.value + "</strong> von 5 · " + (rt.count ? rt.count + " Bewertungen" : "") + (rt.source ? " · " + rt.source : ""); }
   }
 
-  /* --- Galerie + Lightbox ------------------------------------------------------------------------ */
+  /* --- Galerie: manuelles Karussell + Lightbox ---------------------------------------------------- */
   var gallery = [];
   function renderGallery() {
-    var grid = $("#galleryGrid"); if (!grid) return;
+    var track = $("#carTrack"); if (!track) return;
     gallery = (H.gallery || []).map(function (g) { return typeof g === "string" ? { src: g, alt: "" } : g; });
     gallery.forEach(function (g, i) {
-      var btn = el("button", { class: "gallery-item reveal", type: "button", "aria-label": "Bild vergrößern: " + (g.alt || ""), style: "transition-delay:" + ((i % 4) * 60) + "ms" }, [
-        el("img", { src: g.src, alt: g.alt || ("Galeriebild " + (i + 1)), loading: "lazy" })
+      var slide = el("button", { class: "car-slide", type: "button", "aria-label": "Bild vergrößern: " + (g.alt || "") }, [
+        el("div", { class: "car-slide-img" }, [ el("img", { src: g.src, alt: g.alt || ("Galeriebild " + (i + 1)), loading: "lazy" }) ]),
+        el("figcaption", { class: "car-caption" }, [
+          el("span", { class: "num", text: (i < 9 ? "0" : "") + (i + 1) }),
+          el("span", { text: g.alt || "" })
+        ])
       ]);
-      btn.addEventListener("click", function () { openLightbox(i); });
-      grid.appendChild(btn);
+      slide.addEventListener("click", function () { openLightbox(i); });
+      track.appendChild(slide);
     });
+    initCarousel();
+  }
+  function initCarousel() {
+    var track = $("#carTrack"), prev = $("#carPrev"), next = $("#carNext"), count = $("#carCount");
+    if (!track) return;
+    var total = gallery.length;
+    function slideWidth() {
+      var s = track.querySelector(".car-slide");
+      return s ? s.getBoundingClientRect().width + 18 : track.clientWidth;
+    }
+    function index() { return Math.min(total - 1, Math.round(track.scrollLeft / slideWidth())); }
+    function updateUi() {
+      if (count) count.textContent = (index() + 1) + " / " + total;
+      var max = track.scrollWidth - track.clientWidth - 4;
+      if (prev) prev.disabled = track.scrollLeft <= 4;
+      if (next) next.disabled = track.scrollLeft >= max;
+    }
+    function go(dir) {
+      track.scrollBy({ left: dir * slideWidth(), behavior: REDUCED ? "auto" : "smooth" });
+    }
+    if (prev) prev.addEventListener("click", function () { go(-1); });
+    if (next) next.addEventListener("click", function () { go(1); });
+    track.addEventListener("scroll", function () { requestAnimationFrame(updateUi); }, { passive: true });
+    track.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+      if (e.key === "ArrowRight") { e.preventDefault(); go(1); }
+    });
+    updateUi();
   }
   var lbi = 0;
   function openLightbox(i) { lbi = i; var lb = $("#lightbox"), im = $("#lightboxImg"); if (!lb || !gallery.length) return; im.src = gallery[i].src; im.alt = gallery[i].alt || ""; lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); document.body.style.overflow = "hidden"; }
@@ -471,16 +513,6 @@
     });
   }
 
-  /* --- Hero-Parallax -------------------------------------------------------------------------------------------- */
-  function initParallax() {
-    var bg = $("#heroBg"); if (!bg || REDUCED) return;
-    var ticking = false;
-    window.addEventListener("scroll", function () {
-      if (ticking) return; ticking = true;
-      requestAnimationFrame(function () { var y = window.scrollY; if (y < window.innerHeight) bg.style.transform = "translateY(" + (y * 0.18) + "px) scale(1.06)"; ticking = false; });
-    }, { passive: true });
-  }
-
   /* --- Mobile Buchungsleiste --------------------------------------------------------------------------------------- */
   function initMobileCta() {
     var bar = $("#mobileCta"), price = $("#mobileCtaPrice"); if (!bar) return;
@@ -521,7 +553,7 @@
     renderHero(); renderStats(); renderTrust(); renderAbout(); renderExperiences();
     renderRooms(); renderRatingChart(); renderTestimonials(); renderGallery();
     renderAmenities(); renderNearby(); renderFaq(); renderContact(); renderFooter();
-    initLightbox(); initForm(); initNav(); initParallax(); initMobileCta();
+    initLightbox(); initForm(); initNav(); initMobileCta();
     initHeroFade(); initExperiencesPin(); initReveal();
   });
 })();

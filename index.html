@@ -22,7 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
 
   <script type="application/ld+json" id="ldHotel"></script>
   <script type="application/ld+json" id="ldFaq"></script>
@@ -104,9 +104,18 @@
       <!-- Erlebnisse: gepinnte Scroll-Kapitel -->
       <section class="exp-scroll" id="erlebnisse" aria-label="Erlebnisse">
         <div class="exp-pin">
-          <div class="sheet-pad exp-grid">
-            <div class="exp-texts" id="expTexts"></div>
-            <div class="exp-visuals" id="expVisuals"></div>
+          <div class="sheet-pad exp-inner">
+            <div class="exp-head">
+              <div>
+                <p class="kicker" id="expKicker">Erlebnisse</p>
+                <h2 id="expTitle">Drei Momente, die bleiben.</h2>
+              </div>
+              <span class="exp-count" id="expCount" aria-hidden="true">01 / 03</span>
+            </div>
+            <div class="exp-grid">
+              <div class="exp-texts" id="expTexts"></div>
+              <div class="exp-visuals" id="expVisuals"></div>
+            </div>
           </div>
           <div class="exp-progress" id="expProgress" aria-hidden="true"></div>
         </div>
@@ -139,14 +148,21 @@
         </div>
       </section>
 
-      <!-- Galerie / Einblicke -->
+      <!-- Galerie / Einblicke: manuelles Karussell -->
       <section class="section gallery" id="galerie" aria-labelledby="galTitle">
         <div class="sheet-pad">
-          <div class="section-head reveal">
-            <p class="kicker">Einblicke</p>
-            <h2 id="galTitle">Ein Rundgang durchs Haus</h2>
+          <div class="gallery-head reveal">
+            <div>
+              <p class="kicker">Einblicke</p>
+              <h2 id="galTitle">Ein Rundgang durchs Haus</h2>
+            </div>
+            <div class="car-ui">
+              <span class="car-count" id="carCount">1 / 8</span>
+              <button class="car-btn" id="carPrev" aria-label="Vorheriges Bild">←</button>
+              <button class="car-btn" id="carNext" aria-label="Nächstes Bild">→</button>
+            </div>
           </div>
-          <div class="gallery-grid" id="galleryGrid"></div>
+          <div class="car-track reveal" id="carTrack" aria-label="Bildergalerie" tabindex="0"></div>
         </div>
       </section>
 
@@ -271,7 +287,7 @@
     <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Nächstes Bild">›</button>
   </div>
 
-  <script src="js/content.js?v=4"></script>
-  <script src="js/main.js?v=4"></script>
+  <script src="js/content.js?v=5"></script>
+  <script src="js/main.js?v=5"></script>
 </body>
 </html>

@@ -111,12 +111,17 @@ window.HOTEL = {
   },
 
   /* --- 10. Erlebnisse (Scroll-Kapitel: Text und Bild wechseln beim Scrollen) -- */
+  experiencesIntro: {
+    kicker: "Erlebnisse",
+    title: "Drei Momente, die bleiben."
+  },
   experiences: [
     {
       kicker: "Am Wasser",
       title: "Aufwachen mit Seeblick",
       text: "Öffnen Sie die Balkontür und der Morgen gehört Ihnen: stiller See, " +
             "erste Sonne, ein Kaffee auf der Terrasse. Näher ans Wasser geht kaum.",
+      points: ["Zimmer zur Seeseite verfügbar", "Frühstück auf Wunsch auf dem Balkon"],
       image: "images/exp-1.jpg",
       imageAlt: "Balkon mit Panoramablick über den ruhigen Morgensee"
     },
@@ -125,14 +130,16 @@ window.HOTEL = {
       title: "Küche mit Charakter",
       text: "Unsere Küche kocht saisonal und regional. Ehrlich, frisch und mit " +
             "Liebe zum Handwerk. Am Abend ein Glas Wein, dazu Licht über dem See.",
+      points: ["Saisonkarte mit Produkten aus der Region", "Ausgewählte Schweizer Weine"],
       image: "images/exp-2.jpg",
       imageAlt: "Regionales Gericht, angerichtet auf einem Holztisch"
     },
     {
       kicker: "Ruhe",
-      title: "Wellness & Weite",
+      title: "Zeit für sich: Sauna & Ruheraum",
       text: "Sauna, warmes Holz, weicher Bademantel. Und dahinter immer der See. " +
-            "Zeit, die nur Ihnen gehört.",
+            "Hier gehört die Zeit nur Ihnen.",
+      points: ["Sauna mit Blick ins Grüne", "Ruheraum mit Lesebibliothek"],
       image: "images/exp-3.jpg",
       imageAlt: "Ruhiger Wellnessbereich mit Sauna und Blick ins Grüne"
     }
