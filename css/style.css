@@ -223,7 +223,19 @@ p { color: var(--ink-soft); }
 .about-body p { margin-bottom: 16px; }
 .signature { font-family: var(--font-display); font-style: italic; font-size: 1.15rem; color: var(--color-ink); margin-top: 26px; }
 .signature span { display: block; font-family: var(--font-body); font-style: normal; font-size: .82rem; color: var(--muted); letter-spacing: .04em; margin-top: 2px; }
-.about-media img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--r); box-shadow: var(--shadow); }
+/* Über-uns-Bild als Auto-Slideshow (Crossfade + dezenter Ken-Burns) */
+.about-media { position: relative; aspect-ratio: 4/5; border-radius: var(--r); overflow: hidden; box-shadow: var(--shadow); background: var(--color-sand); }
+.about-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.1s var(--ease-out); }
+.about-slide.active { opacity: 1; }
+.about-slide img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.01); }
+.about-slide.active img { transform: scale(1.07); transition: transform 4.2s ease-out; }
+.about-dots { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 3; display: flex; gap: 7px; }
+.about-dots button {
+  width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  background: rgba(255,255,255,.55); box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  transition: background .3s var(--ease), width .3s var(--ease), border-radius .3s;
+}
+.about-dots button.active { background: #fff; width: 22px; border-radius: 5px; }
 
 /* --- Erlebnisse: gepinnte Scroll-Kapitel ---------------------------------------------------- */
 .exp-scroll { position: relative; height: 240vh; background: var(--color-sand); }

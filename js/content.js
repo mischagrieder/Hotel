@@ -104,8 +104,14 @@ window.HOTEL = {
       "ist mit Bedacht gewählt, von der regionalen Küche bis zum Leinen auf dem Bett.\n\n" +
       "Ob Kurzurlaub, Feier oder Geschäftsreise: Bei uns kommen Sie an, atmen durch " +
       "und fühlen sich sofort zu Hause.",
-    image: "images/about.jpg",
-    imageAlt: "Gemütliche Lounge des Hotels mit Blick auf den See",
+    // Mehrere Bilder wechseln automatisch alle 3 Sekunden (siehe imageInterval).
+    images: [
+      { src: "images/about.jpg",   alt: "Gemütliche Lounge mit grünem Sofa und Blick auf den See" },
+      { src: "images/about-2.jpg", alt: "Leseecke am Fenster mit Blick auf den See" },
+      { src: "images/about-3.jpg", alt: "Einladende Eingangshalle mit frischen Blumen" },
+      { src: "images/about-4.jpg", alt: "Kaminecke mit Sesseln im warmen Abendlicht" }
+    ],
+    imageInterval: 3000,   // Wechsel-Intervall in Millisekunden
     signatureName: "Familie Muster",
     signatureRole: "Gastgeberinnen & Gastgeber"
   },

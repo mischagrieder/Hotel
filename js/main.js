@@ -209,8 +209,54 @@
       var sig = $("#aboutSignature");
       if (sig) { sig.textContent = a.signatureName; if (a.signatureRole) sig.appendChild(el("span", { text: a.signatureRole })); }
     }
-    if (a.image) setAttr("#aboutImage", "src", a.image);
-    setAttr("#aboutImage", "alt", a.imageAlt || a.title || "");
+    // Bild-Slideshow aufbauen
+    var media = $("#aboutMedia"); if (!media) return;
+    var imgs = a.images && a.images.length ? a.images : (a.image ? [{ src: a.image, alt: a.imageAlt }] : []);
+    imgs = imgs.map(function (x) { return typeof x === "string" ? { src: x, alt: a.imageAlt || "" } : x; });
+    imgs.forEach(function (im, i) {
+      media.appendChild(el("div", { class: "about-slide" + (i === 0 ? " active" : "") }, [
+        el("img", { src: im.src, alt: im.alt || a.title || "", loading: i === 0 ? "eager" : "lazy" })
+      ]));
+    });
+    if (imgs.length > 1) startAboutSlideshow(media, imgs.length, a.imageInterval || 3000);
+  }
+
+  /* Auto-Slideshow: wechselt alle N ms, pausiert bei Hover und wenn nicht sichtbar */
+  function startAboutSlideshow(media, n, interval) {
+    var slides = media.querySelectorAll(".about-slide");
+    var dotsWrap = el("div", { class: "about-dots", "aria-hidden": "true" });
+    for (var i = 0; i < n; i++) {
+      (function (idx) {
+        var b = el("button", { class: idx === 0 ? "active" : "", type: "button" });
+        b.addEventListener("click", function () { show(idx); restart(); });
+        dotsWrap.appendChild(b);
+      })(i);
+    }
+    media.appendChild(dotsWrap);
+    var dots = dotsWrap.querySelectorAll("button");
+    var cur = 0, timer = null;
+
+    function show(i) {
+      if (i === cur) return;
+      slides[cur].classList.remove("active"); dots[cur].classList.remove("active");
+      cur = i;
+      slides[cur].classList.add("active"); dots[cur].classList.add("active");
+    }
+    function next() { show((cur + 1) % n); }
+    function start() { if (!timer && !REDUCED) timer = setInterval(next, interval); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function restart() { stop(); start(); }
+
+    media.addEventListener("mouseenter", stop);
+    media.addEventListener("mouseleave", start);
+    document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
+
+    // Nur laufen lassen, solange die Sektion im Blick ist (spart Ressourcen)
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (ents) {
+        ents.forEach(function (en) { en.isIntersecting ? start() : stop(); });
+      }, { threshold: 0.15 }).observe(media);
+    } else { start(); }
   }
 
   /* --- Erlebnisse: gepinnte Scroll-Kapitel --------------------------------------------- */
