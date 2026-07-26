@@ -228,9 +228,27 @@ window.HOTEL = {
 
   /* --- 15. In der Umgebung -------------------------------------------------------- */
   nearby: [
-    { title: "Altstadt Rapperswil", distance: "5 Min.",  text: "Gassen, Rosengärten und das Schloss über dem See." },
-    { title: "Seepromenade",        distance: "1 Min.",  text: "Spazieren, baden, Schiff fahren. Direkt vor der Tür." },
-    { title: "Wander- & Radwege",   distance: "vor Ort", text: "Startpunkte für Touren rund um den See." }
+    {
+      title: "Altstadt Rapperswil",
+      distance: "5 Min.",
+      text: "Gassen, Rosengärten und das Schloss über dem See.",
+      image: "images/near-1.jpg",
+      imageAlt: "Kopfsteingasse in der Altstadt von Rapperswil mit Rosen und Schlossturm"
+    },
+    {
+      title: "Seepromenade",
+      distance: "1 Min.",
+      text: "Spazieren, baden, Schiff fahren. Direkt vor der Tür.",
+      image: "images/near-2.jpg",
+      imageAlt: "Seepromenade mit Steg und Kursschiff im Abendlicht"
+    },
+    {
+      title: "Wander- & Radwege",
+      distance: "vor Ort",
+      text: "Startpunkte für Touren rund um den See.",
+      image: "images/near-3.jpg",
+      imageAlt: "Wanderweg durch eine Blumenwiese mit Blick auf den See"
+    }
   ],
 
   /* --- 16. FAQ (häufige Fragen, erscheint auch in Google) -------------------------- */

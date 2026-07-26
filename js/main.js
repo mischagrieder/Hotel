@@ -415,14 +415,17 @@
     });
   }
 
-  /* --- Umgebung ------------------------------------------------------------------------------------ */
+  /* --- Umgebung: Bildkarten -------------------------------------------------------------------------- */
   function renderNearby() {
     var grid = $("#nearbyGrid"); if (!grid || !H.nearby) return;
     H.nearby.forEach(function (n, i) {
-      grid.appendChild(el("article", { class: "near-card reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
+      grid.appendChild(el("article", { class: "near-card reveal", style: "transition-delay:" + (i * 90) + "ms" }, [
+        n.image ? el("img", { src: n.image, alt: n.imageAlt || n.title, loading: "lazy" }) : null,
         n.distance ? el("span", { class: "near-dist", text: n.distance }) : null,
-        el("h3", { text: n.title }),
-        el("p", { text: n.text })
+        el("div", { class: "near-body" }, [
+          el("h3", { text: n.title }),
+          el("p", { text: n.text })
+        ])
       ]));
     });
   }
