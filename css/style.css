@@ -531,6 +531,8 @@ p { color: var(--ink-soft); }
 @media (max-width: 520px) {
   body { font-size: 16px; }
   .amenities-grid, .nearby-grid, .form-row, .trust-strip { grid-template-columns: 1fr; }
+  /* Einspaltig wirken 3:4-Karten zu hoch */
+  .near-card { aspect-ratio: 4/3; }
   .stats-inner { grid-template-columns: 1fr 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
   .room-features { grid-template-columns: 1fr; }
