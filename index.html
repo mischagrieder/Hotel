@@ -4,174 +4,217 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Titel & Meta werden aus js/content.js gesetzt (Fallback hier) -->
-  <title>Hotel Seeblick</title>
-  <meta name="description" content="Boutique-Hotel am See – stilvolle Zimmer und herzlicher Service." />
+  <title>Hotel Seeblick · Boutique-Hotel direkt am See</title>
+  <meta name="description" content="Stilvoll übernachten direkt am Seeufer – moderne Zimmer, regionale Küche und ein Panoramablick, der bleibt." />
+  <link rel="canonical" href="https://example.com/" />
+  <meta name="theme-color" content="#1f4a3f" />
 
-  <!-- Open Graph (wird von main.js aus content.js befüllt) -->
+  <!-- Open Graph / Social (füllt sich aus content.js) -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Hotel Seeblick" />
-  <meta property="og:description" content="Boutique-Hotel am See." />
+  <meta property="og:site_name" content="Hotel Seeblick" />
+  <meta property="og:title" content="Hotel Seeblick · Boutique-Hotel am See" />
+  <meta property="og:description" content="Moderne Zimmer, regionale Küche und der schönste Blick weit und breit." />
   <meta property="og:image" content="images/og-image.svg" />
+  <meta property="og:url" content="https://example.com/" />
+  <meta name="twitter:card" content="summary_large_image" />
 
   <!-- Schriften -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Strukturierte Daten für Google (füllt sich aus content.js) -->
+  <script type="application/ld+json" id="ldHotel"></script>
 </head>
 <body>
 
-  <!-- ============ HEADER / NAVIGATION ============ -->
+  <!-- Skip-Link (Barrierefreiheit) -->
+  <a href="#willkommen" class="skip-link">Zum Inhalt springen</a>
+
+  <!-- ============ HEADER ============ -->
   <header class="site-header" id="header">
     <div class="container header-inner">
-      <a href="#top" class="logo" id="logo">Seeblick</a>
-
-      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="#start" class="logo" id="logo">Seeblick</a>
 
       <nav class="main-nav" id="mainNav" aria-label="Hauptnavigation">
         <ul>
-          <li><a href="#ueber-uns">Über uns</a></li>
+          <li><a href="#willkommen">Haus</a></li>
+          <li><a href="#erlebnisse">Erlebnisse</a></li>
           <li><a href="#zimmer">Zimmer</a></li>
-          <li><a href="#ausstattung">Ausstattung</a></li>
           <li><a href="#galerie">Galerie</a></li>
           <li><a href="#lage">Lage</a></li>
-          <li><a href="#kontakt" class="nav-cta">Anfragen</a></li>
         </ul>
       </nav>
+
+      <a href="#buchen" class="btn btn-primary btn-sm header-cta" id="headerCta">Anfragen</a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
-  <span id="top"></span>
+  <main id="main">
 
-  <!-- ============ HERO ============ -->
-  <section class="hero" id="hero">
-    <div class="hero-bg" id="heroBg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content container">
-      <p class="hero-eyebrow" id="heroEyebrow">Boutique-Hotel am See</p>
-      <h1 id="heroHeadline">Ankommen. Durchatmen. Genießen.</h1>
-      <p class="hero-subline" id="heroSubline">Ihr stilvolles Rückzugsort direkt am Seeufer.</p>
-      <a href="#kontakt" class="btn btn-primary" id="heroCta">Jetzt anfragen</a>
-    </div>
-    <a href="#ueber-uns" class="hero-scroll" aria-label="Nach unten scrollen">˅</a>
-  </section>
-
-  <!-- ============ ÜBER UNS ============ -->
-  <section class="section about" id="ueber-uns">
-    <div class="container about-grid">
-      <div class="about-text reveal">
-        <p class="eyebrow">Willkommen</p>
-        <h2 id="aboutTitle">Herzlich willkommen</h2>
-        <div id="aboutText"></div>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="start" aria-label="Willkommen">
+      <div class="hero-media">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-scrim"></div>
       </div>
-      <div class="about-image reveal">
-        <img id="aboutImage" alt="" loading="lazy" />
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ ZIMMER ============ -->
-  <section class="section rooms" id="zimmer">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Übernachten</p>
-        <h2>Zimmer &amp; Suiten</h2>
-      </div>
-      <div class="rooms-grid" id="roomsGrid"></div>
-    </div>
-  </section>
-
-  <!-- ============ AUSSTATTUNG ============ -->
-  <section class="section amenities" id="ausstattung">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Ihr Komfort</p>
-        <h2>Ausstattung &amp; Services</h2>
-      </div>
-      <div class="amenities-grid" id="amenitiesGrid"></div>
-    </div>
-  </section>
-
-  <!-- ============ GALERIE ============ -->
-  <section class="section gallery" id="galerie">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Einblicke</p>
-        <h2>Galerie</h2>
-      </div>
-      <div class="gallery-grid" id="galleryGrid"></div>
-    </div>
-  </section>
-
-  <!-- ============ BEWERTUNGEN ============ -->
-  <section class="section testimonials" id="bewertungen">
-    <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow eyebrow-light">Gästestimmen</p>
-        <h2>Das sagen unsere Gäste</h2>
-      </div>
-      <div class="testimonials-grid" id="testimonialsGrid"></div>
-    </div>
-  </section>
-
-  <!-- ============ LAGE ============ -->
-  <section class="section location" id="lage">
-    <div class="container location-grid">
-      <div class="location-text reveal">
-        <p class="eyebrow">Anfahrt</p>
-        <h2>Lage &amp; Umgebung</h2>
-        <p class="location-address" id="locationAddress"></p>
-        <p class="location-directions" id="locationDirections"></p>
-        <a href="#" id="mapsLink" class="btn btn-outline" target="_blank" rel="noopener">In Google Maps öffnen</a>
-      </div>
-      <div class="location-map reveal">
-        <iframe id="mapFrame" title="Karte" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ KONTAKT ============ -->
-  <section class="section contact" id="kontakt">
-    <div class="container contact-grid">
-      <div class="contact-info reveal">
-        <p class="eyebrow">Kontakt</p>
-        <h2>Anfrage &amp; Buchung</h2>
-        <ul class="contact-list" id="contactList"></ul>
-        <div class="contact-social" id="contactSocial"></div>
-      </div>
-
-      <form class="contact-form reveal" id="contactForm">
-        <div class="form-row">
-          <label>Name
-            <input type="text" name="name" required />
-          </label>
-          <label>E-Mail
-            <input type="email" name="email" required />
-          </label>
+      <div class="hero-inner container">
+        <p class="hero-kicker reveal" id="heroKicker">Rapperswil · Direkt am Seeufer</p>
+        <h1 class="hero-title reveal" id="heroTitle">Wo der Tag am Wasser beginnt.</h1>
+        <p class="hero-sub reveal" id="heroSub">Ein Boutique-Hotel für alle, die Ruhe, guten Geschmack und den schönsten Blick suchen.</p>
+        <div class="hero-actions reveal">
+          <a href="#buchen" class="btn btn-primary" id="heroCta1">Verfügbarkeit anfragen</a>
+          <a href="#zimmer" class="btn btn-ghost" id="heroCta2">Zimmer entdecken</a>
         </div>
-        <div class="form-row">
-          <label>Anreise
-            <input type="date" name="anreise" />
-          </label>
-          <label>Abreise
-            <input type="date" name="abreise" />
-          </label>
+      </div>
+      <a href="#willkommen" class="hero-scroll" aria-label="Weiter nach unten"><span></span></a>
+    </section>
+
+    <!-- ============ KENNZAHLEN ============ -->
+    <aside class="stats" aria-label="Auf einen Blick">
+      <div class="container stats-inner" id="statsInner"></div>
+    </aside>
+
+    <!-- ============ ÜBER UNS / STORY ============ -->
+    <section class="section about" id="willkommen" aria-labelledby="aboutTitle">
+      <div class="container about-grid">
+        <div class="about-text">
+          <p class="kicker reveal" id="aboutKicker">Willkommen</p>
+          <h2 class="reveal" id="aboutTitle">Ein Haus mit Blick – und mit Haltung.</h2>
+          <p class="lead reveal" id="aboutLead"></p>
+          <div class="about-body reveal" id="aboutBody"></div>
+          <p class="signature reveal" id="aboutSignature"></p>
         </div>
-        <label>Ihre Nachricht
-          <textarea name="nachricht" rows="4" placeholder="Wie können wir Ihnen helfen?"></textarea>
-        </label>
-        <button type="submit" class="btn btn-primary" id="formSubmit">Anfrage senden</button>
-        <p class="form-status" id="formStatus" role="status"></p>
-      </form>
-    </div>
-  </section>
+        <figure class="about-media reveal">
+          <img id="aboutImage" alt="" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============ ERLEBNISSE ============ -->
+    <section class="section experiences" id="erlebnisse" aria-label="Erlebnisse">
+      <div class="container" id="experiencesWrap"></div>
+    </section>
+
+    <!-- ============ ZIMMER ============ -->
+    <section class="section rooms" id="zimmer" aria-labelledby="roomsTitle">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Übernachten</p>
+          <h2 id="roomsTitle">Zimmer &amp; Suiten</h2>
+        </div>
+        <div class="rooms-grid" id="roomsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ AUSSTATTUNG ============ -->
+    <section class="section amenities" id="ausstattung" aria-labelledby="amenTitle">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Ihr Komfort</p>
+          <h2 id="amenTitle">Alles für einen guten Aufenthalt</h2>
+        </div>
+        <div class="amenities-grid" id="amenitiesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ GALERIE ============ -->
+    <section class="section gallery" id="galerie" aria-labelledby="galTitle">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">Einblicke</p>
+          <h2 id="galTitle">Galerie</h2>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ BEWERTUNGEN ============ -->
+    <section class="section testimonials" id="bewertungen" aria-labelledby="testTitle">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker kicker-invert">Gästestimmen</p>
+          <h2 id="testTitle">Was unsere Gäste sagen</h2>
+          <p class="rating-badge reveal" id="ratingBadge"></p>
+        </div>
+        <div class="testimonials-grid" id="testimonialsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ UMGEBUNG ============ -->
+    <section class="section nearby" id="umgebung" aria-labelledby="nearTitle">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="kicker">In der Umgebung</p>
+          <h2 id="nearTitle">Alles in Reichweite</h2>
+        </div>
+        <div class="nearby-grid" id="nearbyGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ LAGE ============ -->
+    <section class="section location" id="lage" aria-labelledby="locTitle">
+      <div class="container location-grid">
+        <div class="location-text">
+          <p class="kicker reveal">Anfahrt</p>
+          <h2 class="reveal" id="locTitle">So finden Sie uns</h2>
+          <p class="location-address reveal" id="locationAddress"></p>
+          <p class="location-directions reveal" id="locationDirections"></p>
+          <a href="#" id="mapsLink" class="btn btn-outline reveal" target="_blank" rel="noopener">In Google Maps öffnen</a>
+        </div>
+        <div class="location-map reveal">
+          <iframe id="mapFrame" title="Standort auf der Karte" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BUCHUNG / ABSCHLUSS-CTA ============ -->
+    <section class="section booking" id="buchen" aria-labelledby="bookTitle">
+      <div class="container booking-grid">
+        <div class="booking-intro reveal">
+          <p class="kicker kicker-invert">Anfrage &amp; Buchung</p>
+          <h2 id="bookTitle">Bereit für ein paar Tage am See?</h2>
+          <p class="booking-lead">Schreiben Sie uns – wir melden uns persönlich und schnell.</p>
+          <ul class="contact-list" id="contactList"></ul>
+          <div class="contact-social" id="contactSocial"></div>
+        </div>
+
+        <form class="booking-form reveal" id="contactForm" novalidate>
+          <div class="form-row">
+            <label>Name
+              <input type="text" name="name" autocomplete="name" required />
+            </label>
+            <label>E-Mail
+              <input type="email" name="email" autocomplete="email" required />
+            </label>
+          </div>
+          <div class="form-row">
+            <label>Anreise
+              <input type="date" name="anreise" />
+            </label>
+            <label>Abreise
+              <input type="date" name="abreise" />
+            </label>
+          </div>
+          <label>Gäste
+            <input type="number" name="gaeste" min="1" max="12" value="2" />
+          </label>
+          <label>Ihre Nachricht
+            <textarea name="nachricht" rows="4" placeholder="Wünsche, Fragen, Zimmerwunsch …"></textarea>
+          </label>
+          <button type="submit" class="btn btn-primary btn-block" id="formSubmit">Anfrage senden</button>
+          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
 
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
@@ -179,24 +222,34 @@
       <div class="footer-brand">
         <span class="footer-logo" id="footerLogo">Seeblick</span>
         <p id="footerTagline"></p>
+        <p class="footer-address" id="footerAddress"></p>
       </div>
       <nav class="footer-nav" aria-label="Footer-Navigation">
-        <a href="#ueber-uns">Über uns</a>
+        <a href="#willkommen">Haus</a>
         <a href="#zimmer">Zimmer</a>
-        <a href="#kontakt">Kontakt</a>
+        <a href="#galerie">Galerie</a>
+        <a href="#buchen">Anfragen</a>
         <a href="impressum.html">Impressum</a>
         <a href="datenschutz.html">Datenschutz</a>
       </nav>
-      <p class="footer-copy">© <span id="footerYear"></span> <span id="footerName">Hotel Seeblick</span>. Alle Rechte vorbehalten.</p>
+    </div>
+    <div class="container footer-copy">
+      © <span id="footerYear"></span> <span id="footerName">Hotel Seeblick</span>. Alle Rechte vorbehalten.
     </div>
   </footer>
 
-  <!-- ============ LIGHTBOX (Galerie) ============ -->
+  <!-- ============ MOBILE BUCHUNGSLEISTE (sticky) ============ -->
+  <div class="mobile-cta" id="mobileCta">
+    <span class="mobile-cta-price" id="mobileCtaPrice"></span>
+    <a href="#buchen" class="btn btn-primary btn-sm">Anfragen</a>
+  </div>
+
+  <!-- ============ LIGHTBOX ============ -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button class="lightbox-close" id="lightboxClose" aria-label="Schließen">×</button>
-    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Zurück">‹</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Vorheriges Bild">‹</button>
     <img class="lightbox-img" id="lightboxImg" alt="" />
-    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Weiter">›</button>
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Nächstes Bild">›</button>
   </div>
 
   <script src="js/content.js"></script>

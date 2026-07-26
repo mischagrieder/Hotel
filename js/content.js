@@ -2,149 +2,218 @@
    HOTEL-WEBSITE · ZENTRALE INHALTSDATEI
    -----------------------------------------------------------------------------
    Das ist die EINZIGE Datei, die du pro Hotel ausfüllen musst.
-   Ändere die Texte, Preise, Kontaktdaten und Bildpfade unten – der Rest der
-   Website (Layout, Design, Technik) passt sich automatisch an.
+   Ändere Texte, Preise, Kontaktdaten und Bildpfade – Layout, Design, Technik,
+   SEO (inkl. Google-Rich-Results) passen sich automatisch an.
 
-   Tipp: Farben & Schriften stehen im Abschnitt "theme" ganz oben.
-   Bilder liegen im Ordner /images (siehe images/README.md).
+   Reihenfolge in dieser Datei:
+   1 Grunddaten/SEO · 2 Design · 3 Logo · 4 Hero · 5 Kennzahlen · 6 Bewertung
+   7 Über-uns · 8 Erlebnisse · 9 Zimmer · 10 Ausstattung · 11 Galerie
+   12 Stimmen · 13 Umgebung · 14 Lage · 15 Kontakt · 16 Buchung · 17 Social · 18 Recht
    ============================================================================= */
 
 window.HOTEL = {
 
   /* --- 1. Grunddaten & SEO ------------------------------------------------ */
   meta: {
-    name: "Hotel Seeblick",                       // Name des Hotels
-    tagline: "Boutique-Hotel am See",             // kurzer Slogan (Untertitel)
+    name: "Hotel Seeblick",
+    tagline: "Boutique-Hotel am See",
+    // SEO-Titel (Browser-Tab & Google-Ergebnis). Kurz, mit Ort & Nutzen:
+    seoTitle: "Hotel Seeblick · Boutique-Hotel direkt am See in Rapperswil",
     seoDescription:
-      "Boutique-Hotel Seeblick – stilvolle Zimmer, herzlicher Service und " +
-      "traumhafter Blick auf den See. Jetzt Ihren Aufenthalt anfragen.",
-    url: "https://example.com",                   // spätere Domain (für SEO/OpenGraph)
-    lang: "de"
+      "Stilvoll übernachten direkt am Seeufer: das Hotel Seeblick in Rapperswil " +
+      "vereint moderne Zimmer, regionale Küche und einen Panoramablick, der bleibt. " +
+      "Jetzt Verfügbarkeit anfragen.",
+    url: "https://example.com",       // spätere Domain (für SEO/OpenGraph/Sitemap)
+    lang: "de",
+    priceRange: "€€",                 // €, €€, €€€ – erscheint in Google
+    currency: "CHF"
   },
 
   /* --- 2. Design (Farben & Schriften) ------------------------------------- */
-  // Diese Werte überschreiben das Standard-Design. Einfach Hex-Farben tauschen.
+  // Tausche einfach die Hex-Werte. --accent ist die Markenfarbe (Buttons/Links).
   theme: {
-    colorPrimary: "#1b1b1b",   // Dunkler Grundton (Header, Footer, Überschriften)
-    colorAccent:  "#c8a45c",   // Akzentfarbe (Buttons, Linien, Highlights) – z.B. Gold
-    colorBg:      "#faf8f5",   // Heller Seitenhintergrund
-    colorText:    "#2e2b28",   // Fließtextfarbe
-    fontHeading:  "'Cormorant Garamond', Georgia, serif",  // Überschriften (elegant)
-    fontBody:     "'Inter', system-ui, sans-serif"          // Fließtext (klar)
+    colorInk:        "#1b1a17",   // Haupttext & Überschriften
+    colorBg:         "#faf6ef",   // warmer Elfenbein-Hintergrund
+    colorSand:       "#f1e9dc",   // abgesetzte Sektionen
+    colorSurface:    "#ffffff",   // Karten
+    colorAccent:     "#1f4a3f",   // Marke: tiefes Kiefern-/Seegrün
+    colorAccentDark: "#163a31",   // Hover
+    fontDisplay:     "'Fraunces', 'Cormorant Garamond', Georgia, serif",
+    fontBody:        "'Inter', system-ui, -apple-system, sans-serif"
   },
 
   /* --- 3. Logo / Marke ---------------------------------------------------- */
   brand: {
-    logoText: "Seeblick",       // Text-Logo im Menü (leer lassen, wenn logoImage genutzt wird)
-    logoImage: ""               // optional: "images/logo.svg" (überschreibt logoText)
+    logoText: "Seeblick",
+    logoImage: ""                 // optional: "images/logo.svg"
   },
 
-  /* --- 4. Hero (großes Bild ganz oben) ------------------------------------ */
+  /* --- 4. Hero ------------------------------------------------------------ */
   hero: {
     image: "images/hero.svg",
-    headline: "Ankommen. Durchatmen. Genießen.",
-    subline: "Ihr stilvolles Rückzugsort direkt am Seeufer.",
-    ctaText: "Jetzt anfragen",
-    ctaHref: "#kontakt"
+    imageAlt: "Blick über den See auf das Hotel Seeblick in der Abendsonne",
+    kicker: "Rapperswil · Direkt am Seeufer",
+    headline: "Wo der Tag am Wasser beginnt.",
+    subline: "Ein Boutique-Hotel für alle, die Ruhe, guten Geschmack und den " +
+             "schönsten Blick weit und breit suchen.",
+    ctaPrimaryText: "Verfügbarkeit anfragen",
+    ctaPrimaryHref: "#buchen",
+    ctaSecondaryText: "Zimmer entdecken",
+    ctaSecondaryHref: "#zimmer"
   },
 
-  /* --- 5. Willkommen / Über uns ------------------------------------------- */
+  /* --- 5. Kennzahlen (kleine Trust-Zeile unter dem Hero) ------------------ */
+  // Werte mit einer Zahl werden sanft hochgezählt (z.B. "18", "1932", "4.9").
+  stats: [
+    { value: "4.9", label: "★ Gästebewertung" },
+    { value: "18",  label: "Zimmer & Suiten" },
+    { value: "1",   suffix: " Min.", label: "zum Seeufer" },
+    { value: "1932", label: "familiengeführt seit" }
+  ],
+
+  /* --- 6. Bewertung (für Social Proof & Google-Rich-Results) -------------- */
+  rating: {
+    value: 4.9,      // Durchschnitt
+    count: 214,      // Anzahl Bewertungen
+    source: "Google & Booking.com"
+  },
+
+  /* --- 7. Über uns / Willkommen (Story) ----------------------------------- */
   about: {
-    title: "Herzlich willkommen",
-    text:
+    kicker: "Willkommen",
+    title: "Ein Haus mit Blick – und mit Haltung.",
+    lead: "Seit drei Generationen empfangen wir unsere Gäste wie Freunde.",
+    body:
       "Eingebettet zwischen sanften Hügeln und glitzerndem Wasser verbindet das " +
-      "Hotel Seeblick zeitlose Eleganz mit herzlicher Gastfreundschaft. Seit drei " +
-      "Generationen empfangen wir unsere Gäste wie Freunde – mit Liebe zum Detail, " +
-      "regionaler Küche und dem schönsten Blick weit und breit.\n\n" +
-      "Ob Kurzurlaub, Familienfeier oder Geschäftsreise: Bei uns finden Sie Ruhe, " +
-      "Komfort und einen Ort, an dem Sie sich sofort zu Hause fühlen.",
-    image: "images/about.svg"
+      "Hotel Seeblick zeitgemässe Ruhe mit herzlicher Gastfreundschaft. Jedes " +
+      "Detail – von der regionalen Küche bis zum Leinen auf dem Bett – ist mit " +
+      "Bedacht gewählt.\n\n" +
+      "Ob Kurzurlaub, Feier oder Geschäftsreise: Bei uns kommen Sie an, atmen durch " +
+      "und fühlen sich sofort zu Hause.",
+    image: "images/about.svg",
+    imageAlt: "Gemütliche Lounge des Hotels mit Blick auf den See",
+    signatureName: "Familie Muster",
+    signatureRole: "Gastgeberinnen & Gastgeber"
   },
 
-  /* --- 6. Zimmer & Suiten ------------------------------------------------- */
+  /* --- 8. Erlebnisse (Bild/Text im Wechsel – das Herz des Storytellings) --- */
+  experiences: [
+    {
+      kicker: "Am Wasser",
+      title: "Aufwachen mit Seeblick",
+      text: "Öffnen Sie die Balkontür und der Morgen gehört Ihnen: stiller See, " +
+            "erste Sonne, ein Kaffee auf der Terrasse. Näher ans Wasser geht kaum.",
+      image: "images/exp-1.svg",
+      imageAlt: "Balkon mit Panoramablick über den ruhigen Morgensee"
+    },
+    {
+      kicker: "Genuss",
+      title: "Küche mit Charakter",
+      text: "Unsere Küche kocht saisonal und regional – ehrlich, frisch und mit " +
+            "Liebe zum Handwerk. Am Abend ein Glas Wein, dazu Licht über dem See.",
+      image: "images/exp-2.svg",
+      imageAlt: "Regionales Gericht, angerichtet auf einem Holztisch"
+    },
+    {
+      kicker: "Ruhe",
+      title: "Wellness & Weite",
+      text: "Sauna, warmes Holz, weicher Bademantel – und dahinter immer der See. " +
+            "Zeit, die nur Ihnen gehört.",
+      image: "images/exp-3.svg",
+      imageAlt: "Ruhiger Wellnessbereich mit Sauna und Blick ins Grüne"
+    }
+  ],
+
+  /* --- 9. Zimmer & Suiten ------------------------------------------------- */
   rooms: [
     {
       name: "Doppelzimmer Komfort",
-      description:
-        "Gemütliches Zimmer mit französischem Balkon und Blick ins Grüne – ideal " +
-        "für Erholungssuchende.",
-      price: "ab 120 € / Nacht",
+      description: "Gemütliches Zimmer mit französischem Balkon und Blick ins Grüne.",
+      price: "ab CHF 120",
+      priceNote: "/ Nacht",
       size: "24 m²",
+      occupancy: "2 Personen",
       image: "images/room-1.svg",
-      features: ["2 Personen", "Kingsize-Bett", "Kostenloses WLAN", "Regendusche"]
+      imageAlt: "Modern eingerichtetes Doppelzimmer mit hellem Holz",
+      features: ["Kingsize-Bett", "Kostenloses WLAN", "Regendusche"]
     },
     {
       name: "Juniorsuite Seeblick",
-      description:
-        "Großzügige Suite mit eigenem Balkon und direktem Blick auf den See. " +
-        "Ihr Panorama zum Aufwachen.",
-      price: "ab 190 € / Nacht",
+      description: "Grosszügige Suite mit eigenem Balkon und direktem Blick auf den See.",
+      price: "ab CHF 190",
+      priceNote: "/ Nacht",
       size: "38 m²",
+      occupancy: "2–3 Personen",
       image: "images/room-2.svg",
-      features: ["2–3 Personen", "Balkon mit Seeblick", "Sitzecke", "Nespresso"]
+      imageAlt: "Helle Juniorsuite mit Balkon und Seeblick",
+      features: ["Balkon mit Seeblick", "Sitzecke", "Nespresso"]
     },
     {
       name: "Panorama-Suite",
-      description:
-        "Unser Highlight: Wohn-/Schlafbereich, Badewanne am Fenster und ein " +
-        "Rundumblick, den Sie nie vergessen werden.",
-      price: "ab 260 € / Nacht",
+      description: "Unser Highlight: Wohnbereich, Badewanne am Fenster, Rundumblick.",
+      price: "ab CHF 260",
+      priceNote: "/ Nacht",
       size: "55 m²",
+      occupancy: "2–4 Personen",
       image: "images/room-3.svg",
-      features: ["2–4 Personen", "Freistehende Badewanne", "Wohnbereich", "Minibar inkl."]
+      imageAlt: "Grosse Panorama-Suite mit freistehender Badewanne am Fenster",
+      features: ["Freistehende Badewanne", "Wohnbereich", "Minibar inklusive"]
     }
   ],
 
-  /* --- 7. Ausstattung & Services ------------------------------------------ */
-  // icon: einer der Namen aus der Icon-Liste unten in dieser Datei (siehe ICONS)
+  /* --- 10. Ausstattung & Services ----------------------------------------- */
+  // icon: siehe Liste am Dateiende (ICONS)
   amenities: [
-    { icon: "wifi",       title: "Kostenloses WLAN",   text: "Schnelles Internet im ganzen Haus." },
-    { icon: "breakfast",  title: "Frühstücksbuffet",   text: "Regional & frisch, bis 11 Uhr." },
-    { icon: "parking",    title: "Parkplätze",         text: "Kostenlos direkt am Hotel." },
-    { icon: "spa",        title: "Wellness & Sauna",   text: "Entspannen mit Blick aufs Wasser." },
-    { icon: "restaurant", title: "Restaurant",         text: "Saisonale Küche aus der Region." },
-    { icon: "pet",        title: "Haustiere",          text: "Ihr Vierbeiner ist willkommen." }
+    { icon: "wifi",       title: "Kostenloses WLAN",  text: "Schnell im ganzen Haus." },
+    { icon: "breakfast",  title: "Frühstücksbuffet",  text: "Regional & frisch, bis 11 Uhr." },
+    { icon: "parking",    title: "Parkplätze",        text: "Kostenlos direkt am Hotel." },
+    { icon: "spa",        title: "Wellness & Sauna",  text: "Entspannen mit Seeblick." },
+    { icon: "restaurant", title: "Restaurant",        text: "Saisonale Küche der Region." },
+    { icon: "pet",        title: "Haustiere",         text: "Ihr Vierbeiner ist willkommen." }
   ],
 
-  /* --- 8. Galerie --------------------------------------------------------- */
+  /* --- 11. Galerie -------------------------------------------------------- */
+  // Objekte mit Alt-Text (gut für SEO). Reine Strings gehen auch.
   gallery: [
-    "images/gallery-1.svg",
-    "images/gallery-2.svg",
-    "images/gallery-3.svg",
-    "images/gallery-4.svg",
-    "images/gallery-5.svg",
-    "images/gallery-6.svg"
+    { src: "images/gallery-1.svg", alt: "Aussenansicht des Hotels am Seeufer" },
+    { src: "images/gallery-2.svg", alt: "Detail der gemütlichen Zimmereinrichtung" },
+    { src: "images/gallery-3.svg", alt: "Terrasse mit Blick auf den See" },
+    { src: "images/gallery-4.svg", alt: "Regionales Frühstück am Morgen" },
+    { src: "images/gallery-5.svg", alt: "Wellnessbereich mit Sauna" },
+    { src: "images/gallery-6.svg", alt: "Sonnenuntergang über dem See" }
   ],
 
-  /* --- 9. Bewertungen / Stimmen ------------------------------------------- */
+  /* --- 12. Gästestimmen --------------------------------------------------- */
   testimonials: [
-    {
-      quote: "Der schönste Blick, den wir je aus einem Hotelzimmer hatten. Wir kommen wieder!",
-      author: "Familie Berger",
-      source: "Google-Bewertung"
-    },
-    {
-      quote: "Herzlicher Empfang, tolles Frühstück und absolute Ruhe. Rundum perfekt.",
-      author: "Sabine K.",
-      source: "Booking.com"
-    },
-    {
-      quote: "Stilvoll eingerichtet und liebevoll geführt. Ein echtes Kleinod am See.",
-      author: "Thomas M.",
-      source: "TripAdvisor"
-    }
+    { quote: "Der schönste Blick, den wir je aus einem Hotelzimmer hatten. Wir kommen wieder!",
+      author: "Familie Berger", source: "Google", rating: 5 },
+    { quote: "Herzlicher Empfang, tolles Frühstück und absolute Ruhe. Rundum perfekt.",
+      author: "Sabine K.", source: "Booking.com", rating: 5 },
+    { quote: "Stilvoll eingerichtet und liebevoll geführt. Ein echtes Kleinod am See.",
+      author: "Thomas M.", source: "TripAdvisor", rating: 5 }
   ],
 
-  /* --- 10. Lage & Anfahrt ------------------------------------------------- */
+  /* --- 13. In der Umgebung (Storytelling + lokales SEO) ------------------- */
+  nearby: [
+    { title: "Altstadt Rapperswil", distance: "5 Min.", text: "Gassen, Rosengärten und das Schloss über dem See." },
+    { title: "Seepromenade",        distance: "1 Min.", text: "Spazieren, baden, Schiff fahren – direkt vor der Tür." },
+    { title: "Wander- & Radwege",   distance: "vor Ort", text: "Startpunkte für Touren rund um den See." }
+  ],
+
+  /* --- 14. Lage & Anfahrt ------------------------------------------------- */
   location: {
     address: "Seepromenade 12, 8640 Rapperswil, Schweiz",
-    mapsQuery: "Seepromenade 12, 8640 Rapperswil",  // wird in Google Maps eingebettet
-    directions:
-      "5 Minuten vom Bahnhof entfernt · direkt an der Seepromenade · " +
-      "kostenlose Parkplätze am Haus."
+    street: "Seepromenade 12",
+    postalCode: "8640",
+    city: "Rapperswil",
+    country: "CH",
+    mapsQuery: "Seepromenade 12, 8640 Rapperswil",
+    lat: 47.2266,
+    lng: 8.8180,
+    directions: "5 Minuten vom Bahnhof · direkt an der Seepromenade · kostenlose Parkplätze am Haus."
   },
 
-  /* --- 11. Kontakt -------------------------------------------------------- */
+  /* --- 15. Kontakt -------------------------------------------------------- */
   contact: {
     phone: "+41 55 123 45 67",
     email: "willkommen@hotel-seeblick.example",
@@ -152,24 +221,25 @@ window.HOTEL = {
     hours: "Rezeption täglich 7:00 – 22:00 Uhr"
   },
 
-  /* --- 12. Buchung / Anfrage ---------------------------------------------- */
-  // type "email": Anfrageformular öffnet eine vorausgefüllte E-Mail.
-  // type "external": CTA verlinkt direkt auf ein Buchungssystem (externalUrl).
-  // formEndpoint (optional): Formspree-URL – dann wird das Formular direkt gesendet.
+  /* --- 16. Buchung / Anfrage ---------------------------------------------- */
+  // type "email": Formular öffnet vorausgefüllte E-Mail.
+  // type "external": CTA verlinkt auf ein Buchungssystem (externalUrl).
+  // formEndpoint (optional): Formspree-URL – dann wird direkt gesendet.
   booking: {
     type: "email",
-    externalUrl: "",          // z.B. "https://www.booking.com/hotel/..."
-    formEndpoint: ""          // z.B. "https://formspree.io/f/xxxxxxx"
+    externalUrl: "",
+    formEndpoint: "",
+    ctaText: "Verfügbarkeit anfragen"
   },
 
-  /* --- 13. Social Media (leer lassen = wird ausgeblendet) ----------------- */
+  /* --- 17. Social Media (leer lassen = ausgeblendet) ---------------------- */
   social: {
     instagram: "https://instagram.com/",
     facebook: "https://facebook.com/",
     tripadvisor: ""
   },
 
-  /* --- 14. Rechtliches (für Impressum & Datenschutz) ---------------------- */
+  /* --- 18. Rechtliches (für Impressum & Datenschutz) ---------------------- */
   legal: {
     company: "Hotel Seeblick GmbH",
     owner: "Maria Muster",
@@ -181,8 +251,7 @@ window.HOTEL = {
 };
 
 /* =============================================================================
-   ICONS – verfügbare Werte für "icon" im Abschnitt amenities:
+   ICONS – verfügbare Werte für "icon" (Abschnitt amenities):
    wifi · breakfast · parking · spa · restaurant · pet · pool · ac ·
    room-service · bar · bike · view · family · reception
-   (Brauchst du ein anderes Symbol? Einfach einen dieser Namen verwenden.)
    ============================================================================= */

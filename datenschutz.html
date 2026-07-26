@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" href="images/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
@@ -52,12 +52,14 @@
     (function () {
       var H = window.HOTEL || {}, L = H.legal || {}, C = H.contact || {}, T = H.theme || {};
       var r = document.documentElement.style;
-      if (T.colorPrimary) r.setProperty("--color-primary", T.colorPrimary);
-      if (T.colorAccent)  r.setProperty("--color-accent", T.colorAccent);
-      if (T.colorBg)      r.setProperty("--color-bg", T.colorBg);
-      if (T.colorText)    r.setProperty("--color-text", T.colorText);
-      if (T.fontHeading)  r.setProperty("--font-heading", T.fontHeading);
-      if (T.fontBody)     r.setProperty("--font-body", T.fontBody);
+      if (T.colorInk)        r.setProperty("--color-ink", T.colorInk);
+      if (T.colorBg)         r.setProperty("--color-bg", T.colorBg);
+      if (T.colorSand)       r.setProperty("--color-sand", T.colorSand);
+      if (T.colorSurface)    r.setProperty("--color-surface", T.colorSurface);
+      if (T.colorAccent)     r.setProperty("--color-accent", T.colorAccent);
+      if (T.colorAccentDark) r.setProperty("--color-accent-dark", T.colorAccentDark);
+      if (T.fontDisplay)     r.setProperty("--font-display", T.fontDisplay);
+      if (T.fontBody)        r.setProperty("--font-body", T.fontBody);
 
       var parts = [];
       if (L.company) parts.push(L.company);

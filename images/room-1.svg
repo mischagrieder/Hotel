@@ -1,17 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Doppelzimmer">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#efe9e0"/>
-      <stop offset="1" stop-color="#e2d8c8"/>
-    </linearGradient>
-  </defs>
-  <rect width="900" height="600" fill="url(#bg)"/>
-  <g fill="none" stroke="#b48a3f" stroke-opacity="0.55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
-    <circle cx="580" cy="220" r="34"/>
-    <path d="M190 370 L270 280 L390 310 L520 265 L640 310 L710 370"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 675" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Doppelzimmer">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4ecdd"/><stop offset="1" stop-color="#e7dbc6"/></linearGradient></defs>
+  <rect width="900" height="675" fill="url(#g)"/>
+  <circle cx="600" cy="267" r="30" fill="none" stroke="#1f4a3f" stroke-opacity="0.55" stroke-width="2"/>
+  <g fill="none" stroke="#1f4a3f" stroke-opacity="0.5" stroke-width="2.5" stroke-linecap="round">
+    <path d="M130 367 q 80 -26 160 0 t 160 0 t 160 0 t 160 0"/>
+    <path d="M130 401 q 80 22 160 0 t 160 0 t 160 0 t 160 0" stroke-opacity="0.3"/>
   </g>
-  <text x="50%" y="430" text-anchor="middle" fill="#b48a3f"
-        font-family="Georgia, 'Cormorant Garamond', serif" font-size="34" font-style="italic" letter-spacing="1">Doppelzimmer</text>
-  <text x="50%" y="472" text-anchor="middle" fill="rgba(60,50,40,0.5)"
-        font-family="Arial, sans-serif" font-size="15" letter-spacing="3" text-transform="uppercase">BILD ERSETZEN</text>
+  <text x='50%' y='487' text-anchor='middle' fill='#1f4a3f' font-family="Georgia,'Fraunces',serif" font-size='34' font-style='italic'>Doppelzimmer</text><text x='50%' y='523' text-anchor='middle' fill='rgba(31,74,63,0.45)' font-family='Arial,sans-serif' font-size='13' letter-spacing='3'>BILD ERSETZEN</text>
 </svg>

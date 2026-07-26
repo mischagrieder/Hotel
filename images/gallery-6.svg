@@ -1,17 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Impression">
-  <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#2b2724"/>
-      <stop offset="1" stop-color="#423a32"/>
-    </linearGradient>
-  </defs>
-  <rect width="800" height="800" fill="url(#bg)"/>
-  <g fill="none" stroke="#d8b878" stroke-opacity="0.55" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round">
-    <circle cx="530" cy="320" r="34"/>
-    <path d="M140 470 L220 380 L340 410 L470 365 L590 410 L660 470"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Impression">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4ecdd"/><stop offset="1" stop-color="#e7dbc6"/></linearGradient></defs>
+  <rect width="1200" height="600" fill="url(#g)"/>
+  <circle cx="750" cy="230" r="30" fill="none" stroke="#1f4a3f" stroke-opacity="0.55" stroke-width="2"/>
+  <g fill="none" stroke="#1f4a3f" stroke-opacity="0.5" stroke-width="2.5" stroke-linecap="round">
+    <path d="M280 330 q 80 -26 160 0 t 160 0 t 160 0 t 160 0"/>
+    <path d="M280 364 q 80 22 160 0 t 160 0 t 160 0 t 160 0" stroke-opacity="0.3"/>
   </g>
-  <text x="50%" y="530" text-anchor="middle" fill="#d8b878"
-        font-family="Georgia, 'Cormorant Garamond', serif" font-size="34" font-style="italic" letter-spacing="1">Impression</text>
-  <text x="50%" y="572" text-anchor="middle" fill="rgba(255,255,255,0.45)"
-        font-family="Arial, sans-serif" font-size="15" letter-spacing="3" text-transform="uppercase">BILD ERSETZEN</text>
+  <text x='50%' y='450' text-anchor='middle' fill='#1f4a3f' font-family="Georgia,'Fraunces',serif" font-size='34' font-style='italic'>Impression</text><text x='50%' y='486' text-anchor='middle' fill='rgba(31,74,63,0.45)' font-family='Arial,sans-serif' font-size='13' letter-spacing='3'>BILD ERSETZEN</text>
 </svg>

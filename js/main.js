@@ -1,39 +1,39 @@
 /* =============================================================================
    HOTEL-WEBSITE · RENDER- & INTERAKTIONS-LOGIK
    -----------------------------------------------------------------------------
-   Diese Datei musst du normalerweise NICHT anfassen.
-   Sie liest window.HOTEL aus js/content.js und baut daraus die Seite auf.
+   Liest window.HOTEL aus js/content.js, baut die Seite auf, injiziert die
+   SEO-Strukturdaten und steuert die Animationen. Muss normal nicht angefasst werden.
    ============================================================================= */
 (function () {
   "use strict";
-
   var H = window.HOTEL || {};
 
-  /* --- kleine Helfer ----------------------------------------------------- */
-  function $(sel) { return document.querySelector(sel); }
+  /* --- Helfer ------------------------------------------------------------ */
+  function $(s, r) { return (r || document).querySelector(s); }
   function el(tag, attrs, children) {
-    var node = document.createElement(tag);
-    if (attrs) {
-      Object.keys(attrs).forEach(function (k) {
-        if (k === "class") node.className = attrs[k];
-        else if (k === "html") node.innerHTML = attrs[k];
-        else if (k === "text") node.textContent = attrs[k];
-        else if (k.indexOf("on") === 0 && typeof attrs[k] === "function")
-          node.addEventListener(k.slice(2), attrs[k]);
-        else if (attrs[k] != null && attrs[k] !== false) node.setAttribute(k, attrs[k]);
-      });
-    }
-    (children || []).forEach(function (c) {
-      if (c == null) return;
-      node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
+    var n = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === "class") n.className = attrs[k];
+      else if (k === "html") n.innerHTML = attrs[k];
+      else if (k === "text") n.textContent = attrs[k];
+      else if (k === "style") n.style.cssText = attrs[k];
+      else if (k.indexOf("on") === 0 && typeof attrs[k] === "function") n.addEventListener(k.slice(2), attrs[k]);
+      else if (attrs[k] != null && attrs[k] !== false) n.setAttribute(k, attrs[k]);
     });
-    return node;
+    (children || []).forEach(function (c) { if (c != null) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return n;
   }
-  function setText(sel, value) { var n = $(sel); if (n && value != null) n.textContent = value; }
-  function setAttr(sel, attr, value) { var n = $(sel); if (n && value != null) n.setAttribute(attr, value); }
+  function setText(s, v) { var n = $(s); if (n && v != null) n.textContent = v; }
+  function setAttr(s, a, v) { var n = $(s); if (n && v != null) n.setAttribute(a, v); }
+  function abs(url) {
+    if (!url) return url;
+    if (/^https?:\/\//.test(url)) return url;
+    var base = (H.meta && H.meta.url) ? H.meta.url.replace(/\/$/, "") : "";
+    return base ? base + "/" + url.replace(/^\//, "") : url;
+  }
 
-  /* --- Inline-Icons (für Ausstattung) ------------------------------------ */
-  var ICON_WRAP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">';
+  /* --- Icons (Ausstattung) ----------------------------------------------- */
+  var W = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">';
   var ICONS = {
     wifi: '<path d="M5 12.55a11 11 0 0 1 14 0"/><path d="M8.5 16.11a6 6 0 0 1 7 0"/><path d="M12 20h.01"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/>',
     breakfast: '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
@@ -50,350 +50,344 @@
     family: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
     reception: '<path d="M3 21h18"/><path d="M5 21V10l7-4 7 4v11"/><path d="M9 21v-6h6v6"/>'
   };
-  function iconSvg(name) { return ICON_WRAP + (ICONS[name] || '<path d="M20 6L9 17l-5-5"/>') + "</svg>"; }
+  function icon(name) { return W + (ICONS[name] || '<path d="M20 6L9 17l-5-5"/>') + "</svg>"; }
 
-  /* --- 1. Theme anwenden ------------------------------------------------- */
+  /* --- Theme & Meta ------------------------------------------------------ */
   function applyTheme() {
-    var t = H.theme || {};
-    var root = document.documentElement.style;
-    if (t.colorPrimary) root.setProperty("--color-primary", t.colorPrimary);
-    if (t.colorAccent)  root.setProperty("--color-accent", t.colorAccent);
-    if (t.colorBg)      root.setProperty("--color-bg", t.colorBg);
-    if (t.colorText)    root.setProperty("--color-text", t.colorText);
-    if (t.fontHeading)  root.setProperty("--font-heading", t.fontHeading);
-    if (t.fontBody)     root.setProperty("--font-body", t.fontBody);
+    var t = H.theme || {}, r = document.documentElement.style, map = {
+      colorInk: "--color-ink", colorBg: "--color-bg", colorSand: "--color-sand",
+      colorSurface: "--color-surface", colorAccent: "--color-accent", colorAccentDark: "--color-accent-dark",
+      fontDisplay: "--font-display", fontBody: "--font-body"
+    };
+    Object.keys(map).forEach(function (k) { if (t[k]) r.setProperty(map[k], t[k]); });
   }
-
-  /* --- 2. Meta / SEO ----------------------------------------------------- */
   function applyMeta() {
     var m = H.meta || {};
-    if (m.name) document.title = m.name + (m.tagline ? " · " + m.tagline : "");
+    if (m.seoTitle) document.title = m.seoTitle;
+    else if (m.name) document.title = m.name + (m.tagline ? " · " + m.tagline : "");
     if (m.lang) document.documentElement.setAttribute("lang", m.lang);
     setAttr('meta[name="description"]', "content", m.seoDescription);
-    setAttr('meta[property="og:title"]', "content", m.name);
+    setAttr('meta[property="og:title"]', "content", m.name + (m.tagline ? " · " + m.tagline : ""));
     setAttr('meta[property="og:description"]', "content", m.seoDescription);
-    if (H.hero && H.hero.image) setAttr('meta[property="og:image"]', "content", H.hero.image);
-    if (m.url) setAttr('meta[property="og:url"]', "content", m.url);
+    setAttr('meta[property="og:site_name"]', "content", m.name);
+    if (H.hero && H.hero.image) setAttr('meta[property="og:image"]', "content", abs(H.hero.image));
+    if (m.url) { setAttr('meta[property="og:url"]', "content", m.url); setAttr('link[rel="canonical"]', "href", m.url); }
+    if (H.theme && H.theme.colorAccent) setAttr('meta[name="theme-color"]', "content", H.theme.colorAccent);
+  }
+  function injectJsonLd() {
+    var m = H.meta || {}, loc = H.location || {}, c = H.contact || {}, rt = H.rating || {};
+    var data = {
+      "@context": "https://schema.org", "@type": "Hotel",
+      name: m.name, description: m.seoDescription, url: m.url || undefined,
+      telephone: c.phone, priceRange: m.priceRange,
+      image: H.hero && H.hero.image ? [abs(H.hero.image)] : undefined,
+      address: { "@type": "PostalAddress", streetAddress: loc.street, addressLocality: loc.city, postalCode: loc.postalCode, addressCountry: loc.country },
+      geo: (loc.lat && loc.lng) ? { "@type": "GeoCoordinates", latitude: loc.lat, longitude: loc.lng } : undefined,
+      amenityFeature: (H.amenities || []).map(function (a) { return { "@type": "LocationFeatureSpecification", name: a.title, value: true }; })
+    };
+    if (rt.value && rt.count) data.aggregateRating = { "@type": "AggregateRating", ratingValue: rt.value, reviewCount: rt.count, bestRating: 5 };
+    var node = $("#ldHotel"); if (node) node.textContent = JSON.stringify(data);
   }
 
-  /* --- 3. Marke / Logo --------------------------------------------------- */
+  /* --- Brand / Hero ------------------------------------------------------ */
   function applyBrand() {
     var b = H.brand || {};
-    var logo = $("#logo"), footerLogo = $("#footerLogo");
-    if (b.logoImage) {
-      var img = '<img src="' + b.logoImage + '" alt="' + ((H.meta && H.meta.name) || "") + '" style="height:40px" />';
-      if (logo) logo.innerHTML = img;
-    } else if (b.logoText) {
-      if (logo) logo.textContent = b.logoText;
-      if (footerLogo) footerLogo.textContent = b.logoText;
-    }
+    if (b.logoImage) { var lg = $("#logo"); if (lg) lg.innerHTML = '<img src="' + b.logoImage + '" alt="' + ((H.meta && H.meta.name) || "") + '" style="height:36px">'; }
+    else if (b.logoText) { setText("#logo", b.logoText); setText("#footerLogo", b.logoText); }
   }
-
-  /* --- 4. Hero ----------------------------------------------------------- */
   function renderHero() {
     var h = H.hero || {};
     if (h.image) { var bg = $("#heroBg"); if (bg) bg.style.backgroundImage = "url('" + h.image + "')"; }
-    setText("#heroEyebrow", (H.meta && H.meta.tagline) || "");
-    setText("#heroHeadline", h.headline);
-    setText("#heroSubline", h.subline);
-    var cta = $("#heroCta");
-    if (cta && h.ctaText) cta.textContent = h.ctaText;
-    // Externes Buchungssystem: CTA-Buttons dorthin verlinken
-    var booking = H.booking || {};
-    if (booking.type === "external" && booking.externalUrl) {
-      [cta, $(".nav-cta")].forEach(function (n) {
-        if (n) { n.setAttribute("href", booking.externalUrl); n.setAttribute("target", "_blank"); n.setAttribute("rel", "noopener"); }
+    setText("#heroKicker", h.kicker);
+    setText("#heroTitle", h.headline);
+    setText("#heroSub", h.subline);
+    var c1 = $("#heroCta1"), c2 = $("#heroCta2");
+    if (c1 && h.ctaPrimaryText) { c1.textContent = h.ctaPrimaryText; if (h.ctaPrimaryHref) c1.setAttribute("href", h.ctaPrimaryHref); }
+    if (c2 && h.ctaSecondaryText) { c2.textContent = h.ctaSecondaryText; if (h.ctaSecondaryHref) c2.setAttribute("href", h.ctaSecondaryHref); }
+    setText("#headerCta", (H.booking && H.booking.ctaText) ? "Anfragen" : "Anfragen");
+    // Externes Buchungssystem
+    var bk = H.booking || {};
+    if (bk.type === "external" && bk.externalUrl) {
+      [c1, $("#headerCta"), $(".mobile-cta .btn")].forEach(function (n) {
+        if (n) { n.setAttribute("href", bk.externalUrl); n.setAttribute("target", "_blank"); n.setAttribute("rel", "noopener"); }
       });
-    } else if (cta && h.ctaHref) {
-      cta.setAttribute("href", h.ctaHref);
     }
   }
 
-  /* --- 5. Über uns ------------------------------------------------------- */
+  /* --- Kennzahlen (mit Count-up) ----------------------------------------- */
+  function renderStats() {
+    var wrap = $("#statsInner"); if (!wrap || !H.stats) return;
+    H.stats.forEach(function (s) {
+      wrap.appendChild(el("div", { class: "stat" }, [
+        el("div", { class: "stat-value", "data-value": s.value, "data-suffix": s.suffix || "", text: s.value + (s.suffix || "") }),
+        el("div", { class: "stat-label", text: s.label })
+      ]));
+    });
+  }
+  function countUp(node) {
+    var raw = node.getAttribute("data-value"), suffix = node.getAttribute("data-suffix") || "";
+    var num = parseFloat(raw); if (isNaN(num)) return;
+    var dec = (raw.split(".")[1] || "").length, dur = 1100, t0 = null;
+    function step(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min((ts - t0) / dur, 1), val = (num * (0.2 + 0.8 * (1 - Math.pow(1 - p, 3))));
+      node.textContent = val.toFixed(dec) + suffix;
+      if (p < 1) requestAnimationFrame(step); else node.textContent = num.toFixed(dec) + suffix;
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* --- Über uns ---------------------------------------------------------- */
   function renderAbout() {
     var a = H.about || {};
+    setText("#aboutKicker", a.kicker);
     setText("#aboutTitle", a.title);
-    var box = $("#aboutText");
-    if (box && a.text) {
-      box.innerHTML = "";
-      String(a.text).split("\n\n").forEach(function (p) { box.appendChild(el("p", { text: p })); });
+    setText("#aboutLead", a.lead);
+    var body = $("#aboutBody");
+    if (body && a.body) { body.innerHTML = ""; String(a.body).split("\n\n").forEach(function (p) { body.appendChild(el("p", { text: p })); }); }
+    if (a.signatureName) {
+      var sig = $("#aboutSignature");
+      if (sig) { sig.textContent = a.signatureName; if (a.signatureRole) sig.appendChild(el("span", { text: a.signatureRole })); }
     }
     if (a.image) setAttr("#aboutImage", "src", a.image);
-    setAttr("#aboutImage", "alt", a.title || "");
+    setAttr("#aboutImage", "alt", a.imageAlt || a.title || "");
   }
 
-  /* --- 6. Zimmer --------------------------------------------------------- */
-  function renderRooms() {
-    var grid = $("#roomsGrid"); if (!grid) return;
-    (H.rooms || []).forEach(function (r) {
-      var features = (r.features || []).map(function (f) { return el("span", { class: "room-tag", text: f }); });
-      var card = el("article", { class: "room-card reveal" }, [
-        el("div", { class: "room-img" }, [ el("img", { src: r.image, alt: r.name, loading: "lazy" }) ]),
-        el("div", { class: "room-body" }, [
-          el("div", { class: "room-head" }, [
-            el("h3", { text: r.name }),
-            r.size ? el("span", { class: "room-size", text: r.size }) : null
-          ]),
-          el("p", { class: "room-desc", text: r.description }),
-          el("div", { class: "room-tags" }, features),
-          el("div", { class: "room-foot" }, [
-            el("span", { class: "room-price", text: r.price || "" }),
-            el("a", { class: "room-link", href: "#kontakt", text: "Anfragen →" })
-          ])
+  /* --- Erlebnisse -------------------------------------------------------- */
+  function renderExperiences() {
+    var wrap = $("#experiencesWrap"); if (!wrap || !H.experiences) return;
+    H.experiences.forEach(function (e) {
+      wrap.appendChild(el("article", { class: "experience reveal" }, [
+        el("figure", { class: "experience-media" }, [ el("img", { src: e.image, alt: e.imageAlt || e.title, loading: "lazy" }) ]),
+        el("div", { class: "experience-text" }, [
+          el("p", { class: "kicker", text: e.kicker }),
+          el("h3", { text: e.title }),
+          el("p", { text: e.text })
         ])
-      ]);
-      grid.appendChild(card);
+      ]));
     });
   }
 
-  /* --- 7. Ausstattung ---------------------------------------------------- */
+  /* --- Zimmer ------------------------------------------------------------ */
+  function renderRooms() {
+    var grid = $("#roomsGrid"); if (!grid) return;
+    (H.rooms || []).forEach(function (r, i) {
+      var tags = (r.features || []).map(function (f) { return el("span", { class: "room-tag", text: f }); });
+      grid.appendChild(el("article", { class: "room-card reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
+        el("div", { class: "room-media" }, [
+          el("img", { src: r.image, alt: r.imageAlt || r.name, loading: "lazy" }),
+          r.size ? el("span", { class: "room-badge", text: r.size }) : null
+        ]),
+        el("div", { class: "room-body" }, [
+          el("h3", { text: r.name }),
+          r.occupancy ? el("p", { class: "room-meta", text: r.occupancy }) : null,
+          el("p", { class: "room-desc", text: r.description }),
+          el("div", { class: "room-tags" }, tags),
+          el("div", { class: "room-foot" }, [
+            el("span", { class: "room-price" }, [ document.createTextNode(r.price || ""), r.priceNote ? el("small", { text: " " + r.priceNote }) : null ]),
+            el("a", { class: "room-link", href: "#buchen" }, [ "Anfragen", el("span", { text: "→" }) ])
+          ])
+        ])
+      ]));
+    });
+  }
+
+  /* --- Ausstattung ------------------------------------------------------- */
   function renderAmenities() {
     var grid = $("#amenitiesGrid"); if (!grid) return;
-    (H.amenities || []).forEach(function (a) {
-      grid.appendChild(el("div", { class: "amenity reveal" }, [
-        el("div", { class: "amenity-icon", html: iconSvg(a.icon) }),
+    (H.amenities || []).forEach(function (a, i) {
+      grid.appendChild(el("div", { class: "amenity reveal", style: "transition-delay:" + ((i % 3) * 70) + "ms" }, [
+        el("div", { class: "amenity-icon", html: icon(a.icon) }),
         el("h3", { text: a.title }),
         el("p", { text: a.text })
       ]));
     });
   }
 
-  /* --- 8. Galerie + Lightbox --------------------------------------------- */
-  var galleryImages = [];
+  /* --- Galerie + Lightbox ------------------------------------------------ */
+  var gallery = [];
   function renderGallery() {
     var grid = $("#galleryGrid"); if (!grid) return;
-    galleryImages = H.gallery || [];
-    galleryImages.forEach(function (src, i) {
-      var fig = el("button", { class: "gallery-item reveal", type: "button", "aria-label": "Bild vergrößern" }, [
-        el("img", { src: src, alt: "Galeriebild " + (i + 1), loading: "lazy" })
+    gallery = (H.gallery || []).map(function (g) { return typeof g === "string" ? { src: g, alt: "" } : g; });
+    gallery.forEach(function (g, i) {
+      var btn = el("button", { class: "gallery-item reveal", type: "button", "aria-label": "Bild vergrößern", style: "transition-delay:" + ((i % 4) * 60) + "ms" }, [
+        el("img", { src: g.src, alt: g.alt || ("Galeriebild " + (i + 1)), loading: "lazy" })
       ]);
-      fig.addEventListener("click", function () { openLightbox(i); });
-      grid.appendChild(fig);
+      btn.addEventListener("click", function () { openLightbox(i); });
+      grid.appendChild(btn);
     });
   }
-
-  var lbIndex = 0;
-  function openLightbox(i) {
-    lbIndex = i;
-    var lb = $("#lightbox"), img = $("#lightboxImg");
-    if (!lb || !img || !galleryImages.length) return;
-    img.src = galleryImages[i];
-    lb.classList.add("open");
-    lb.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-  function closeLightbox() {
-    var lb = $("#lightbox");
-    if (!lb) return;
-    lb.classList.remove("open");
-    lb.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-  function stepLightbox(dir) {
-    if (!galleryImages.length) return;
-    lbIndex = (lbIndex + dir + galleryImages.length) % galleryImages.length;
-    $("#lightboxImg").src = galleryImages[lbIndex];
-  }
+  var lbi = 0;
+  function openLightbox(i) { lbi = i; var lb = $("#lightbox"), im = $("#lightboxImg"); if (!lb || !gallery.length) return; im.src = gallery[i].src; im.alt = gallery[i].alt || ""; lb.classList.add("open"); lb.setAttribute("aria-hidden", "false"); document.body.style.overflow = "hidden"; }
+  function closeLightbox() { var lb = $("#lightbox"); if (lb) { lb.classList.remove("open"); lb.setAttribute("aria-hidden", "true"); document.body.style.overflow = ""; } }
+  function stepLb(d) { if (!gallery.length) return; lbi = (lbi + d + gallery.length) % gallery.length; $("#lightboxImg").src = gallery[lbi].src; $("#lightboxImg").alt = gallery[lbi].alt || ""; }
   function initLightbox() {
-    var close = $("#lightboxClose"), prev = $("#lightboxPrev"), next = $("#lightboxNext"), lb = $("#lightbox");
-    if (close) close.addEventListener("click", closeLightbox);
-    if (prev) prev.addEventListener("click", function () { stepLightbox(-1); });
-    if (next) next.addEventListener("click", function () { stepLightbox(1); });
-    if (lb) lb.addEventListener("click", function (e) { if (e.target === lb) closeLightbox(); });
+    var b;
+    if (b = $("#lightboxClose")) b.addEventListener("click", closeLightbox);
+    if (b = $("#lightboxPrev")) b.addEventListener("click", function () { stepLb(-1); });
+    if (b = $("#lightboxNext")) b.addEventListener("click", function () { stepLb(1); });
+    if (b = $("#lightbox")) b.addEventListener("click", function (e) { if (e.target === b) closeLightbox(); });
     document.addEventListener("keydown", function (e) {
-      if (!$("#lightbox") || !$("#lightbox").classList.contains("open")) return;
-      if (e.key === "Escape") closeLightbox();
-      if (e.key === "ArrowLeft") stepLightbox(-1);
-      if (e.key === "ArrowRight") stepLightbox(1);
+      var lb = $("#lightbox"); if (!lb || !lb.classList.contains("open")) return;
+      if (e.key === "Escape") closeLightbox(); if (e.key === "ArrowLeft") stepLb(-1); if (e.key === "ArrowRight") stepLb(1);
     });
   }
 
-  /* --- 9. Bewertungen ---------------------------------------------------- */
+  /* --- Bewertungen ------------------------------------------------------- */
   function renderTestimonials() {
-    var grid = $("#testimonialsGrid"); if (!grid) return;
-    (H.testimonials || []).forEach(function (t) {
-      grid.appendChild(el("figure", { class: "testimonial reveal" }, [
-        el("div", { class: "stars", text: "★★★★★" }),
+    var grid = $("#testimonialsGrid"); if (grid) (H.testimonials || []).forEach(function (t, i) {
+      var stars = "★★★★★".slice(0, t.rating || 5);
+      grid.appendChild(el("figure", { class: "testimonial reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
+        el("div", { class: "stars", text: stars }),
         el("blockquote", { text: "„" + t.quote + "“" }),
-        el("figcaption", {}, [
-          el("strong", { text: t.author }),
-          t.source ? el("span", { text: " · " + t.source }) : null
-        ])
+        el("figcaption", {}, [ el("strong", { text: t.author }), t.source ? el("span", { text: " · " + t.source }) : null ])
+      ]));
+    });
+    var rt = H.rating || {};
+    if (rt.value) { var badge = $("#ratingBadge"); if (badge) badge.innerHTML = "<strong>★ " + rt.value + "</strong> von 5 · " + (rt.count ? rt.count + " Bewertungen" : "") + (rt.source ? " · " + rt.source : ""); }
+  }
+
+  /* --- Umgebung ---------------------------------------------------------- */
+  function renderNearby() {
+    var grid = $("#nearbyGrid"); if (!grid || !H.nearby) return;
+    H.nearby.forEach(function (n, i) {
+      grid.appendChild(el("article", { class: "near-card reveal", style: "transition-delay:" + (i * 80) + "ms" }, [
+        n.distance ? el("span", { class: "near-dist", text: n.distance }) : null,
+        el("h3", { text: n.title }),
+        el("p", { text: n.text })
       ]));
     });
   }
 
-  /* --- 10. Lage ---------------------------------------------------------- */
+  /* --- Lage -------------------------------------------------------------- */
   function renderLocation() {
     var l = H.location || {};
     setText("#locationAddress", l.address);
     setText("#locationDirections", l.directions);
-    var query = l.mapsQuery || l.address || "";
-    if (query) {
-      var enc = encodeURIComponent(query);
-      setAttr("#mapFrame", "src", "https://www.google.com/maps?q=" + enc + "&output=embed");
-      setAttr("#mapsLink", "href", "https://www.google.com/maps/search/?api=1&query=" + enc);
-    }
+    var q = l.mapsQuery || l.address || "";
+    if (q) { var e = encodeURIComponent(q); setAttr("#mapFrame", "src", "https://www.google.com/maps?q=" + e + "&output=embed"); setAttr("#mapsLink", "href", "https://www.google.com/maps/search/?api=1&query=" + e); }
   }
 
-  /* --- 11. Kontakt ------------------------------------------------------- */
+  /* --- Kontakt (im Buchungsblock) ---------------------------------------- */
   function renderContact() {
-    var c = H.contact || {};
-    var list = $("#contactList");
-    if (list) {
-      var rows = [
-        c.phone ? { label: "Telefon", value: c.phone, href: "tel:" + c.phone.replace(/\s/g, "") } : null,
-        c.email ? { label: "E-Mail", value: c.email, href: "mailto:" + c.email } : null,
-        c.address ? { label: "Adresse", value: c.address } : null,
-        c.hours ? { label: "Rezeption", value: c.hours } : null
-      ];
-      rows.forEach(function (r) {
-        if (!r) return;
-        list.appendChild(el("li", {}, [
-          el("span", { class: "contact-label", text: r.label }),
-          r.href ? el("a", { href: r.href, text: r.value }) : el("span", { text: r.value })
-        ]));
-      });
-    }
-    // Social
-    var s = H.social || {}, sBox = $("#contactSocial");
-    if (sBox) {
-      var links = [
-        { key: "instagram", label: "Instagram" },
-        { key: "facebook", label: "Facebook" },
-        { key: "tripadvisor", label: "TripAdvisor" }
-      ];
-      links.forEach(function (li) {
-        if (s[li.key]) sBox.appendChild(el("a", { href: s[li.key], target: "_blank", rel: "noopener", text: li.label }));
-      });
-    }
-  }
-
-  /* --- 12. Kontaktformular ----------------------------------------------- */
-  function initForm() {
-    var form = $("#contactForm"), status = $("#formStatus");
-    if (!form) return;
-    var booking = H.booking || {}, contact = H.contact || {};
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var data = new FormData(form);
-
-      // Variante A: Formspree-Endpoint hinterlegt → direkt senden
-      if (booking.formEndpoint) {
-        status.textContent = "Wird gesendet …";
-        fetch(booking.formEndpoint, { method: "POST", body: data, headers: { Accept: "application/json" } })
-          .then(function (res) {
-            if (res.ok) { form.reset(); status.textContent = "Vielen Dank! Ihre Anfrage wurde gesendet."; status.className = "form-status ok"; }
-            else { throw new Error("fail"); }
-          })
-          .catch(function () { status.textContent = "Senden fehlgeschlagen. Bitte per E-Mail an " + (contact.email || "") + "."; status.className = "form-status err"; });
-        return;
-      }
-
-      // Variante B (Standard): vorausgefüllte E-Mail öffnen
-      var subject = "Anfrage über die Website – " + (data.get("name") || "");
-      var body =
-        "Name: " + (data.get("name") || "") + "\n" +
-        "E-Mail: " + (data.get("email") || "") + "\n" +
-        "Anreise: " + (data.get("anreise") || "") + "\n" +
-        "Abreise: " + (data.get("abreise") || "") + "\n\n" +
-        "Nachricht:\n" + (data.get("nachricht") || "");
-      var mail = "mailto:" + (contact.email || "") +
-        "?subject=" + encodeURIComponent(subject) +
-        "&body=" + encodeURIComponent(body);
-      window.location.href = mail;
-      status.textContent = "Ihr E-Mail-Programm wurde geöffnet. Bitte senden Sie die Nachricht ab.";
-      status.className = "form-status ok";
+    var c = H.contact || {}, list = $("#contactList");
+    if (list) [
+      c.phone ? { l: "Telefon", v: c.phone, h: "tel:" + c.phone.replace(/\s/g, "") } : null,
+      c.email ? { l: "E-Mail", v: c.email, h: "mailto:" + c.email } : null,
+      c.address ? { l: "Adresse", v: c.address } : null,
+      c.hours ? { l: "Rezeption", v: c.hours } : null
+    ].forEach(function (r) {
+      if (!r) return;
+      list.appendChild(el("li", {}, [ el("span", { class: "contact-label", text: r.l }), r.h ? el("a", { href: r.h, text: r.v }) : el("span", { text: r.v }) ]));
+    });
+    var s = H.social || {}, box = $("#contactSocial");
+    if (box) [["instagram", "Instagram"], ["facebook", "Facebook"], ["tripadvisor", "TripAdvisor"]].forEach(function (p) {
+      if (s[p[0]]) box.appendChild(el("a", { href: s[p[0]], target: "_blank", rel: "noopener", text: p[1] }));
     });
   }
 
-  /* --- 13. Footer -------------------------------------------------------- */
+  /* --- Formular ---------------------------------------------------------- */
+  function initForm() {
+    var form = $("#contactForm"), status = $("#formStatus"); if (!form) return;
+    var bk = H.booking || {}, c = H.contact || {};
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      var d = new FormData(form);
+      if (bk.formEndpoint) {
+        status.textContent = "Wird gesendet …"; status.className = "form-status";
+        fetch(bk.formEndpoint, { method: "POST", body: d, headers: { Accept: "application/json" } })
+          .then(function (res) { if (res.ok) { form.reset(); status.textContent = "Vielen Dank! Ihre Anfrage ist bei uns eingegangen."; status.className = "form-status ok"; } else throw 0; })
+          .catch(function () { status.textContent = "Senden fehlgeschlagen – bitte per E-Mail an " + (c.email || "") + "."; status.className = "form-status err"; });
+        return;
+      }
+      var subject = "Anfrage über die Website – " + (d.get("name") || "");
+      var body = "Name: " + (d.get("name") || "") + "\nE-Mail: " + (d.get("email") || "") +
+        "\nAnreise: " + (d.get("anreise") || "") + "\nAbreise: " + (d.get("abreise") || "") +
+        "\nGäste: " + (d.get("gaeste") || "") + "\n\nNachricht:\n" + (d.get("nachricht") || "");
+      window.location.href = "mailto:" + (c.email || "") + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      status.textContent = "Ihr E-Mail-Programm wurde geöffnet – bitte die Nachricht noch absenden."; status.className = "form-status ok";
+    });
+  }
+
+  /* --- Footer ------------------------------------------------------------ */
   function renderFooter() {
     setText("#footerYear", String(new Date().getFullYear()));
     setText("#footerName", (H.meta && H.meta.name) || "");
     setText("#footerTagline", (H.meta && H.meta.tagline) || "");
+    setText("#footerAddress", (H.contact && H.contact.address) || "");
   }
 
-  /* --- 14. Navigation: mobil, sticky, smooth-scroll ---------------------- */
+  /* --- Navigation -------------------------------------------------------- */
   function initNav() {
     var toggle = $("#navToggle"), nav = $("#mainNav"), header = $("#header");
     if (toggle && nav) {
       toggle.addEventListener("click", function () {
-        var open = nav.classList.toggle("open");
-        toggle.classList.toggle("open", open);
+        var open = nav.classList.toggle("open"); toggle.classList.toggle("open", open);
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
         toggle.setAttribute("aria-label", open ? "Menü schließen" : "Menü öffnen");
+        document.body.style.overflow = open ? "hidden" : "";
       });
-      nav.querySelectorAll("a").forEach(function (a) {
-        a.addEventListener("click", function () {
-          nav.classList.remove("open"); toggle.classList.remove("open");
-          toggle.setAttribute("aria-expanded", "false");
-        });
-      });
+      nav.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", function () { nav.classList.remove("open"); toggle.classList.remove("open"); toggle.setAttribute("aria-expanded", "false"); document.body.style.overflow = ""; }); });
     }
-    // Sticky-Zustand
-    function onScroll() { if (header) header.classList.toggle("scrolled", window.scrollY > 40); }
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-
-    // Smooth-Scroll für interne Anker
+    function onScroll() { if (header) header.classList.toggle("scrolled", window.scrollY > 30); }
+    window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener("click", function (e) {
-        var id = a.getAttribute("href");
-        if (id.length < 2) return;
-        var target = document.querySelector(id);
-        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: "smooth", block: "start" }); }
-      });
+      a.addEventListener("click", function (e) { var id = a.getAttribute("href"); if (id.length < 2) return; var t = document.querySelector(id); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: "smooth", block: "start" }); } });
     });
   }
 
-  /* --- 15. Scroll-Reveal-Animation --------------------------------------- */
+  /* --- Hero-Parallax ----------------------------------------------------- */
+  function initParallax() {
+    var bg = $("#heroBg"); if (!bg || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var ticking = false;
+    window.addEventListener("scroll", function () {
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () { var y = window.scrollY; if (y < window.innerHeight) bg.style.transform = "translateY(" + (y * 0.18) + "px) scale(1.06)"; ticking = false; });
+    }, { passive: true });
+  }
+
+  /* --- Mobile Buchungsleiste --------------------------------------------- */
+  function initMobileCta() {
+    var bar = $("#mobileCta"), price = $("#mobileCtaPrice"); if (!bar) return;
+    var rooms = H.rooms || [];
+    if (price && rooms.length) price.innerHTML = rooms[0].price + " <small>" + (rooms[0].priceNote || "") + "</small>";
+    var booking = $("#buchen");
+    window.addEventListener("scroll", function () {
+      var past = window.scrollY > window.innerHeight * 0.7;
+      var atBooking = booking && booking.getBoundingClientRect().top < window.innerHeight * 0.9;
+      bar.classList.toggle("show", past && !atBooking);
+    }, { passive: true });
+  }
+
+  /* --- Reveal (robust) --------------------------------------------------- */
   function initReveal() {
     var items = [].slice.call(document.querySelectorAll(".reveal"));
     function showAll() { items.forEach(function (i) { i.classList.add("visible"); }); }
-
-    // Ohne IntersectionObserver: alles direkt sichtbar (nie „hängen" bleiben)
     if (!("IntersectionObserver" in window)) { showAll(); return; }
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add("visible"); io.unobserve(en.target); }
+    var io = new IntersectionObserver(function (ents) {
+      ents.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add("visible");
+          if (en.target.classList.contains("stat-value")) countUp(en.target);
+          io.unobserve(en.target);
+        }
       });
     }, { threshold: 0, rootMargin: "0px 0px -40px 0px" });
     items.forEach(function (i) { io.observe(i); });
-
-    // Sicherheitsnetz 1: alles, was schon im/über dem Sichtfenster liegt, sofort zeigen
-    function revealInView() {
-      items.forEach(function (i) {
-        if (i.getBoundingClientRect().top < window.innerHeight) i.classList.add("visible");
-      });
-    }
-    revealInView();
-    window.addEventListener("load", revealInView);
-
-    // Sicherheitsnetz 2: falls JS/Observer aus irgendeinem Grund nicht greift,
-    // spätestens nach 2,5 s garantiert alles einblenden
-    setTimeout(showAll, 2500);
+    // Count-up-Ziele separat beobachten (sie sind keine .reveal)
+    [].slice.call(document.querySelectorAll(".stat-value")).forEach(function (i) { io.observe(i); });
+    function inView() { items.forEach(function (i) { if (i.getBoundingClientRect().top < window.innerHeight) i.classList.add("visible"); }); }
+    inView(); window.addEventListener("load", inView);
+    setTimeout(showAll, 2600);
   }
 
   /* --- Start ------------------------------------------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
-    applyTheme();
-    applyMeta();
-    applyBrand();
-    renderHero();
-    renderAbout();
-    renderRooms();
-    renderAmenities();
-    renderGallery();
-    renderTestimonials();
-    renderLocation();
-    renderContact();
-    renderFooter();
-    initLightbox();
-    initForm();
-    initNav();
-    initReveal();
+    applyTheme(); applyMeta(); injectJsonLd(); applyBrand();
+    renderHero(); renderStats(); renderAbout(); renderExperiences();
+    renderRooms(); renderAmenities(); renderGallery(); renderTestimonials();
+    renderNearby(); renderLocation(); renderContact(); renderFooter();
+    initLightbox(); initForm(); initNav(); initParallax(); initMobileCta(); initReveal();
   });
 })();
