@@ -132,20 +132,31 @@
     }
   }
 
-  /* Headline wird beim Scrollen transparent und gleitet nach oben */
+  /* Beim Scrollen: Headline wird transparent und gleitet nach oben,
+     das scharfe Hero-Bild blendet fliessend ins verschwommene
+     Hintergrundbild über (kein harter Schnitt mehr). */
   function initHeroFade() {
-    var inner = $("#heroInner"); if (!inner || REDUCED) return;
+    var inner = $("#heroInner"), media = $(".hero-media"), scrollHint = $(".hero-scroll");
+    if (REDUCED) return;
     var ticking = false;
     function update() {
-      var y = window.scrollY, range = window.innerHeight * 0.6;
-      var p = Math.min(1, y / range);
-      inner.style.opacity = String(1 - p);
-      inner.style.transform = "translateY(" + (-p * 40) + "px)";
+      var y = window.scrollY, vh = window.innerHeight;
+      // Text: schnell ausblenden
+      var pText = Math.min(1, y / (vh * 0.6));
+      if (inner) {
+        inner.style.opacity = String(1 - pText);
+        inner.style.transform = "translateY(" + (-pText * 40) + "px)";
+      }
+      if (scrollHint) scrollHint.style.opacity = String(1 - pText);
+      // Bild: sanft von scharf zu verschwommen (bg-fix liegt dahinter)
+      var pImg = Math.min(1, Math.max(0, (y - vh * 0.1) / (vh * 0.8)));
+      if (media) media.style.opacity = String(1 - pImg);
       ticking = false;
     }
     window.addEventListener("scroll", function () {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
     }, { passive: true });
+    update();
   }
 
   /* --- Kennzahlen + Count-up ------------------------------------------------------ */
