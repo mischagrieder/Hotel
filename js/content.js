@@ -50,7 +50,7 @@ window.HOTEL = {
 
   /* --- 4. Hero ------------------------------------------------------------ */
   hero: {
-    image: "images/hero.svg",
+    image: "images/hero.jpg",
     imageAlt: "Blick über den See auf das Hotel Seeblick in der Abendsonne",
     kicker: "Rapperswil · Direkt am Seeufer",
     headline: "Wo der Tag am Wasser beginnt.",
@@ -90,7 +90,7 @@ window.HOTEL = {
       "Bedacht gewählt.\n\n" +
       "Ob Kurzurlaub, Feier oder Geschäftsreise: Bei uns kommen Sie an, atmen durch " +
       "und fühlen sich sofort zu Hause.",
-    image: "images/about.svg",
+    image: "images/about.jpg",
     imageAlt: "Gemütliche Lounge des Hotels mit Blick auf den See",
     signatureName: "Familie Muster",
     signatureRole: "Gastgeberinnen & Gastgeber"
@@ -103,7 +103,7 @@ window.HOTEL = {
       title: "Aufwachen mit Seeblick",
       text: "Öffnen Sie die Balkontür und der Morgen gehört Ihnen: stiller See, " +
             "erste Sonne, ein Kaffee auf der Terrasse. Näher ans Wasser geht kaum.",
-      image: "images/exp-1.svg",
+      image: "images/exp-1.jpg",
       imageAlt: "Balkon mit Panoramablick über den ruhigen Morgensee"
     },
     {
@@ -111,7 +111,7 @@ window.HOTEL = {
       title: "Küche mit Charakter",
       text: "Unsere Küche kocht saisonal und regional – ehrlich, frisch und mit " +
             "Liebe zum Handwerk. Am Abend ein Glas Wein, dazu Licht über dem See.",
-      image: "images/exp-2.svg",
+      image: "images/exp-2.jpg",
       imageAlt: "Regionales Gericht, angerichtet auf einem Holztisch"
     },
     {
@@ -119,7 +119,7 @@ window.HOTEL = {
       title: "Wellness & Weite",
       text: "Sauna, warmes Holz, weicher Bademantel – und dahinter immer der See. " +
             "Zeit, die nur Ihnen gehört.",
-      image: "images/exp-3.svg",
+      image: "images/exp-3.jpg",
       imageAlt: "Ruhiger Wellnessbereich mit Sauna und Blick ins Grüne"
     }
   ],
@@ -133,7 +133,7 @@ window.HOTEL = {
       priceNote: "/ Nacht",
       size: "24 m²",
       occupancy: "2 Personen",
-      image: "images/room-1.svg",
+      image: "images/room-1.jpg",
       imageAlt: "Modern eingerichtetes Doppelzimmer mit hellem Holz",
       features: ["Kingsize-Bett", "Kostenloses WLAN", "Regendusche"]
     },
@@ -144,7 +144,7 @@ window.HOTEL = {
       priceNote: "/ Nacht",
       size: "38 m²",
       occupancy: "2–3 Personen",
-      image: "images/room-2.svg",
+      image: "images/room-2.jpg",
       imageAlt: "Helle Juniorsuite mit Balkon und Seeblick",
       features: ["Balkon mit Seeblick", "Sitzecke", "Nespresso"]
     },
@@ -155,7 +155,7 @@ window.HOTEL = {
       priceNote: "/ Nacht",
       size: "55 m²",
       occupancy: "2–4 Personen",
-      image: "images/room-3.svg",
+      image: "images/room-3.jpg",
       imageAlt: "Grosse Panorama-Suite mit freistehender Badewanne am Fenster",
       features: ["Freistehende Badewanne", "Wohnbereich", "Minibar inklusive"]
     }
@@ -175,12 +175,12 @@ window.HOTEL = {
   /* --- 11. Galerie -------------------------------------------------------- */
   // Objekte mit Alt-Text (gut für SEO). Reine Strings gehen auch.
   gallery: [
-    { src: "images/gallery-1.svg", alt: "Aussenansicht des Hotels am Seeufer" },
-    { src: "images/gallery-2.svg", alt: "Detail der gemütlichen Zimmereinrichtung" },
-    { src: "images/gallery-3.svg", alt: "Terrasse mit Blick auf den See" },
-    { src: "images/gallery-4.svg", alt: "Regionales Frühstück am Morgen" },
-    { src: "images/gallery-5.svg", alt: "Wellnessbereich mit Sauna" },
-    { src: "images/gallery-6.svg", alt: "Sonnenuntergang über dem See" }
+    { src: "images/gallery-1.jpg", alt: "Aussenansicht des Hotels am Seeufer" },
+    { src: "images/gallery-2.jpg", alt: "Detail der gemütlichen Zimmereinrichtung" },
+    { src: "images/gallery-3.jpg", alt: "Terrasse mit Blick auf den See" },
+    { src: "images/gallery-4.jpg", alt: "Regionales Frühstück am Morgen" },
+    { src: "images/gallery-5.jpg", alt: "Wellnessbereich mit Sauna" },
+    { src: "images/gallery-6.jpg", alt: "Sonnenuntergang über dem See" }
   ],
 
   /* --- 12. Gästestimmen --------------------------------------------------- */

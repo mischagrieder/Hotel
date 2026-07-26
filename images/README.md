@@ -1,7 +1,8 @@
 # Bilder-Ordner
 
-Hier liegen alle Bilder der Website. Aktuell sind es **stilvolle Platzhalter (SVG)**.
-Zum Anpassen einfach durch echte Hotelfotos ersetzen.
+Hier liegen alle Bilder der Website. Die Demo nutzt **KI-generierte Beispielfotos
+(JPG)**; zusätzlich liegen neutrale SVG-Platzhalter bei. Für einen echten Kunden
+einfach die JPGs durch dessen Hotelfotos ersetzen (gleiche Dateinamen = fertig).
 
 ## So ersetzt du ein Bild
 
